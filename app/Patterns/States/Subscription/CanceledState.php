@@ -3,8 +3,64 @@
 namespace App\Patterns\States\Subscription;
 
 use App\Enum\SubscriptionStatus;
+use App\Exceptions\SubscriptionException;
 
-class CanceledState extends AbstractSubscriptionState
+
+class CanceledState extends SubscriptionState
 {
-    protected SubscriptionStatus $status = SubscriptionStatus::CANCELED;
+
+    /**
+     * @throws SubscriptionException
+     */
+    public function activate(): void
+    {
+        throw new SubscriptionException(__(
+            'subscription.cannot_activate_canceled'
+        ));
+    }
+
+    /**
+     * @throws SubscriptionException
+     */
+    public function cancel(): void
+    {
+        throw new SubscriptionException(__(
+            'subscription.already_canceled'
+        ));
+    }
+    /**
+     * @throws SubscriptionException
+     */
+
+    public function expire(): void
+    {
+        throw new SubscriptionException(__(
+            'subscription.cannot_expire_canceled'
+        ));
+    }
+
+    /**
+     * @throws SubscriptionException
+     */
+    public function suspend(): void
+    {
+        throw new SubscriptionException(__(
+            'subscription.cannot_suspend_canceled'
+        ));
+    }
+
+    /**
+     * @throws SubscriptionException
+     */
+    public function markPastDue(): void
+    {
+        throw new SubscriptionException(__(
+            'subscription.cannot_mark_past_due_canceled'
+        ));
+    }
+
+    public function getStatus(): SubscriptionStatus
+    {
+        return SubscriptionStatus::CANCELED;
+    }
 }

@@ -3,18 +3,41 @@
 namespace App\Patterns\States\Subscription;
 
 use App\Enum\SubscriptionStatus;
+use App\Exceptions\SubscriptionException;
 
-class PendingState extends AbstractSubscriptionState
+class PendingState  extends SubscriptionState
 {
-    protected SubscriptionStatus $status = SubscriptionStatus::PENDING;
-
     public function activate(): void
     {
-        $this->context->transitionTo(new ActiveState());
+        $this->subscription->setState(new ActiveState($this->subscription));
+        $this->subscription->status = SubscriptionStatus::ACTIVE;
+        $this->subscription->save();
     }
 
     public function cancel(): void
     {
-        $this->context->transitionTo(new CanceledState());
+        $this->subscription->setState(new CanceledState($this->subscription));
+        $this->subscription->status = SubscriptionStatus::CANCELED;
+        $this->subscription->save();
+    }
+
+    public function expire(): void
+    {
+        throw new SubscriptionException(__('subscription.cannot_expire_pending'));
+    }
+
+    public function suspend(): void
+    {
+        throw new SubscriptionException(__('subscription.cannot_suspend_pending'));
+    }
+
+    public function markPastDue(): void
+    {
+        throw new SubscriptionException(__('subscription.cannot_mark_past_due_pending'));
+    }
+
+    public function getStatus(): SubscriptionStatus
+    {
+        return SubscriptionStatus::PENDING;
     }
 }

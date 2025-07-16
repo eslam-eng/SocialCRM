@@ -3,13 +3,17 @@
 namespace App\Models;
 
 use App\Enum\SubscriptionStatus;
-use App\Traits\HasSubscriptionState;
+use App\Patterns\States\Subscription\ActiveState;
+use App\Patterns\States\Subscription\CanceledState;
+use App\Patterns\States\Subscription\ExpiredState;
+use App\Patterns\States\Subscription\PendingState;
+use App\Patterns\States\Subscription\SubscriptionState;
+use App\Patterns\States\Subscription\SuspendedState;
 use Illuminate\Database\Eloquent\Model;
 
 class PlanSubscription extends BaseModel
 {
-    use HasSubscriptionState;
-    
+
     protected $fillable = [
         'plan_id',
         'tenant_id',
@@ -44,32 +48,54 @@ class PlanSubscription extends BaseModel
         return $this->belongsTo(Tenant::class);
     }
 
-    public function isActive(): bool
+    public function setState(SubscriptionState $state): void
     {
-        return $this->status === SubscriptionStatus::ACTIVE;
+        $this->state = $state;
     }
 
-    public function isOnTrial(): bool
+    public function getState(): ?SubscriptionState
     {
-        return $this->trial_ends_at && $this->trial_ends_at->isFuture();
-    }
-
-    public function hasEnded(): bool
-    {
-        return $this->ends_at && $this->ends_at->isPast();
-    }
-
-    public function cancel(bool $immediately = false): void
-    {
-        $this->canceled_at = now();
-        
-        if ($immediately) {
-            $this->ends_at = now();
-            $this->expire();
-        } else {
-            parent::cancel();
+        if ($this->state === null) {
+            $this->initializeState();
         }
-        
-        $this->save();
+        return $this->state;
     }
+
+    protected function initializeState(): void
+    {
+        $this->state = match ($this->status) {
+            SubscriptionStatus::PENDING => new PendingState($this),
+            SubscriptionStatus::ACTIVE => new ActiveState($this),
+            SubscriptionStatus::CANCELED => new CanceledState($this),
+            SubscriptionStatus::EXPIRED => new ExpiredState($this),
+            SubscriptionStatus::SUSPENDED => new SuspendedState($this),
+            SubscriptionStatus::PAST_DUE => new PastDueState($this),
+        };
+    }
+
+    public function activate(): void
+    {
+        $this->getState()->activate();
+    }
+
+    public function cancel(): void
+    {
+        $this->getState()->cancel();
+    }
+
+    public function expire(): void
+    {
+        $this->getState()->expire();
+    }
+
+    public function suspend(): void
+    {
+        $this->getState()->suspend();
+    }
+
+    public function markPastDue(): void
+    {
+        $this->getState()->markPastDue();
+    }
+
 }

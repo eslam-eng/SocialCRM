@@ -3,23 +3,47 @@
 namespace App\Patterns\States\Subscription;
 
 use App\Enum\SubscriptionStatus;
+use App\Exceptions\SubscriptionException;
 
-class PastDueState extends AbstractSubscriptionState
+class PastDueState  extends SubscriptionState
 {
-    protected SubscriptionStatus $status = SubscriptionStatus::PAST_DUE;
-
     public function activate(): void
     {
-        $this->context->transitionTo(new ActiveState());
+        $this->subscription->setState(new ActiveState($this->subscription));
+        $this->subscription->status = SubscriptionStatus::ACTIVE;
+        $this->subscription->save();
     }
 
     public function cancel(): void
     {
-        $this->context->transitionTo(new CanceledState());
+        $this->subscription->setState(new CanceledState($this->subscription));
+        $this->subscription->status = SubscriptionStatus::CANCELED;
+        $this->subscription->save();
+    }
+
+    public function expire(): void
+    {
+        $this->subscription->setState(new ExpiredState($this->subscription));
+        $this->subscription->status = SubscriptionStatus::EXPIRED;
+        $this->subscription->save();
     }
 
     public function suspend(): void
     {
-        $this->context->transitionTo(new SuspendedState());
+        $this->subscription->setState(new SuspendedState($this->subscription));
+        $this->subscription->status = SubscriptionStatus::SUSPENDED;
+        $this->subscription->save();
+    }
+
+    public function markPastDue(): void
+    {
+        throw new SubscriptionException(__(
+            'subscription.already_past_due'
+        ));
+    }
+
+    public function getStatus(): SubscriptionStatus
+    {
+        return SubscriptionStatus::PAST_DUE;
     }
 }
