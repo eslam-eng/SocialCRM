@@ -31,6 +31,11 @@ class ApiResponse
         return self::error($message, $errors, 400);
     }
 
+    public static function validationErrors(string $message = 'validation error', $errors = []): JsonResponse
+    {
+        return self::error($message, $errors, 422);
+    }
+
     public static function notFound(string $message = 'Resource Not Found', $errors = []): JsonResponse
     {
         return self::error($message, $errors, 404);

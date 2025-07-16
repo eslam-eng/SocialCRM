@@ -65,4 +65,15 @@ class User extends Authenticatable
         return $this->belongsTo(Tenant::class, 'current_tenant_id');
     }
 
+    /**
+     * Generate a Sanctum token for the user.
+     *
+     * @param string $name
+     * @param array $abilities
+     * @return string
+     */
+    public function generateToken(string $name = 'auth_token', array $abilities = ['*']): string
+    {
+        return $this->createToken($name, $abilities)->plainTextToken;
+    }
 }

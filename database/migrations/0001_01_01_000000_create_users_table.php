@@ -18,7 +18,9 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('phone')->nullable();
-            $table->string('tenant_id')->comment('current tenant as user may be belongs to multiple tenants')->nullable();
+            $table->string('tenant_id')->comment('current tenant as user may be belongs to multiple tenants');
+            $table->string('country')->nullable();
+            $table->string('device_token')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
