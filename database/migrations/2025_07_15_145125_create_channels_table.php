@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('campaign_users', function (Blueprint $table) {
+        Schema::create('channels', function (Blueprint $table) {
             $table->id();
+
             $table->timestamps();
         });
     }
@@ -22,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('campaign_users');
+        Schema::dropIfExists('channels');
     }
 };
