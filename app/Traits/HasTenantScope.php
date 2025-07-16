@@ -20,6 +20,10 @@ trait HasTenantScope
 
         // Add global scope to filter by tenant_id
         static::addGlobalScope('tenant', function (Builder $builder) {
+            // Allow admins (from admin guard) to bypass tenant scoping
+            if (Auth::guard('admin')->check()) {
+                return;
+            }
             if (Auth::check()) {
                 $builder->where('tenant_id', Auth::user()->current_tenant_id);
             }
