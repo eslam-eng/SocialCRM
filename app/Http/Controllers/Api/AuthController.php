@@ -6,7 +6,7 @@ use App\DTOS\AuthCredentialsDTO;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\AuthFormRequest;
-use App\Services\Actions\AuthService;
+use App\Services\Actions\Auth\AuthService;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class AuthController extends Controller
@@ -19,8 +19,9 @@ class AuthController extends Controller
             $token = $user->generateToken();
             $data = [
                 'user' => $user,
-                'token' => $token
+                'token' => $token,
             ];
+
             return ApiResponse::success(data: $data);
         } catch (UnauthorizedHttpException $e) {
             return ApiResponse::unauthorized(__('auth.failed'), []);

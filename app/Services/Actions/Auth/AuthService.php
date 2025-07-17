@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Services\Actions;
+namespace App\Services\Actions\Auth;
 
 use App\DTOS\AuthCredentialsDTO;
 use App\Models\User;
-use App\Services\UsersService;
+use App\Services\User\UsersService;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class AuthService
+readonly class AuthService
 {
 
     /**
      * Inject UsersService via constructor.
      */
-    public function __construct(protected readonly UsersService $usersService)
+    public function __construct(protected UsersService $usersService)
     {
     }
 

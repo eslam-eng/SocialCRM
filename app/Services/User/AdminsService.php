@@ -1,20 +1,20 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\User;
 
+use App\Models\Admin;
+use App\Models\Filters\AdminsFilter;
 use App\Services\BaseService;
-use App\Models\User;
-use App\Models\Filters\UsersFilter;
 use Illuminate\Database\Eloquent\Builder;
 
-class UsersService extends BaseService
+class AdminsService extends BaseService
 {
     /**
      * Return the filter class for users.
      */
     protected function getFilterClass(): string
     {
-        return UsersFilter::class;
+        return AdminsFilter::class;
     }
 
     /**
@@ -22,6 +22,6 @@ class UsersService extends BaseService
      */
     protected function baseQuery(): Builder
     {
-        return User::query();
+        return Admin::query();
     }
 }

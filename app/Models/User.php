@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Traits\Filterable;
 use App\Traits\HasTenantScope;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -13,9 +14,9 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Filterable,HasTenantScope;
+    use Filterable, HasApiTokens,HasTenantScope;
 
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -67,10 +68,6 @@ class User extends Authenticatable
 
     /**
      * Generate a Sanctum token for the user.
-     *
-     * @param string $name
-     * @param array $abilities
-     * @return string
      */
     public function generateToken(string $name = 'auth_token', array $abilities = ['*']): string
     {

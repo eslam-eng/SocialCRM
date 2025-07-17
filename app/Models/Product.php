@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Traits\HasTenantScope;
 
 class Product extends BaseModel
 {
-    //
+    use HasTenantScope;
 }

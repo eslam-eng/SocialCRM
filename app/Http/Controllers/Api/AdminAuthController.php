@@ -2,31 +2,28 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Admin;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use App\DTOS\AuthCredentialsDTO;
 use App\Helpers\ApiResponse;
+use App\Http\Requests\Api\AuthFormRequest;
+use App\Services\Actions\Auth\AdminAuthService;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class AdminAuthController
 {
-    public function login(Request $request)
+    public function __invoke(AuthFormRequest $request, AdminAuthService $authService)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        try {
+            $credentials = AuthCredentialsDTO::fromRequest($request);
+            $admin = $authService->authenticate($credentials);
+            $token = $admin->generateToken();
+            $data = [
+                'user' => $admin,
+                'token' => $token,
+            ];
 
-        $admin = Admin::where('email', $request->email)->first();
-        if (! $admin || ! Hash::check($request->password, $admin->password)) {
-            throw new UnauthorizedHttpException('', __('auth.failed'));
+            return ApiResponse::success(data: $data);
+        } catch (UnauthorizedHttpException $e) {
+            return ApiResponse::unauthorized(__('auth.failed'), []);
         }
-
-        $token = $admin->createToken('admin_token')->plainTextToken;
-        $data = [
-            'admin' => $admin,
-            'token' => $token,
-        ];
-        return ApiResponse::success(data: $data);
     }
 }

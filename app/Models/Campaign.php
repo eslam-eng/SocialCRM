@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\HasTenantScope;
+
 class Campaign extends BaseModel
 {
+    use HasTenantScope;
+
     protected $fillable = [
         'tenant_id',
         'started_at',
@@ -13,14 +17,14 @@ class Campaign extends BaseModel
         'channel',
         'title',
         'content',
-        'target'
+        'target',
     ];
 
     protected $casts = [
         'started_at' => 'datetime',
         'scheduled_at' => 'datetime',
         'completed_at' => 'datetime',
-        'target' => 'integer'
+        'target' => 'integer',
     ];
 
     public function tenant()

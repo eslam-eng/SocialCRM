@@ -2,10 +2,10 @@
 
 namespace App\DTOS;
 
-use App\DTOS\Interfaces\BaseDTO;
+use App\DTOS\Abstract\BaseDTO;
 use Illuminate\Http\Request;
 
-readonly class AuthCredentialsDTO implements BaseDTO
+class AuthCredentialsDTO extends BaseDTO
 {
     public function __construct(
         public string $identifier,
@@ -23,8 +23,13 @@ readonly class AuthCredentialsDTO implements BaseDTO
     public static function fromRequest(Request $request): static
     {
         return new self(
-           identifier:  $request->identifier,
+            identifier: $request->identifier,
             password: $request->password
         );
+    }
+
+    public function toArray(): array
+    {
+        return [];
     }
 }
