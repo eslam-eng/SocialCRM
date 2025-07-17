@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\DTOS\AuthCredentialsDTO;
+use App\DTOs\AuthCredentialsDTO;
 use App\Helpers\ApiResponse;
 use App\Http\Requests\Api\AuthFormRequest;
 use App\Services\Actions\Auth\AdminAuthService;

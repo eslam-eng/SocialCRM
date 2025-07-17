@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasTenantScope;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Campaign extends BaseModel
 {
@@ -27,7 +28,7 @@ class Campaign extends BaseModel
         'target' => 'integer',
     ];
 
-    public function tenant()
+    public function tenant(): BelongsTo
     {
         return $this->belongsTo(Tenant::class);
     }

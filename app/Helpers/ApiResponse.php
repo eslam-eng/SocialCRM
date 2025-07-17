@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class ApiResponse
 {
@@ -12,7 +13,7 @@ class ApiResponse
             'success' => true,
             'message' => $message,
             'data' => $data,
-            'errors' => []
+            'errors' => [],
         ], $code);
     }
 
@@ -22,32 +23,32 @@ class ApiResponse
             'success' => false,
             'message' => $message,
             'data' => null,
-            'errors' => $errors
+            'errors' => $errors,
         ], $code);
     }
 
     public static function badRequest(string $message = 'Bad Request', $errors = []): JsonResponse
     {
-        return self::error($message, $errors, 400);
+        return self::error($message, $errors, Response::HTTP_BAD_REQUEST);
     }
 
     public static function validationErrors(string $message = 'validation error', $errors = []): JsonResponse
     {
-        return self::error($message, $errors, 422);
+        return self::error($message, $errors, Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     public static function notFound(string $message = 'Resource Not Found', $errors = []): JsonResponse
     {
-        return self::error($message, $errors, 404);
+        return self::error($message, $errors, Response::HTTP_NOT_FOUND);
     }
 
     public static function unauthorized(string $message = 'Unauthorized', $errors = []): JsonResponse
     {
-        return self::error($message, $errors, 401);
+        return self::error($message, $errors, Response::HTTP_UNAUTHORIZED);
     }
 
     public static function forbidden(string $message = 'Forbidden', $errors = []): JsonResponse
     {
-        return self::error($message, $errors, 403);
+        return self::error($message, $errors, Response::HTTP_FORBIDDEN);
     }
 }

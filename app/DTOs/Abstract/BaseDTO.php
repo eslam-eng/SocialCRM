@@ -1,8 +1,8 @@
 <?php
 
-namespace App\DTOS\Abstract;
+namespace App\DTOs\Abstract;
 
-use App\DTOS\Interfaces\BaseDTOInterface;
+use App\DTOs\Interfaces\BaseDTOInterface;
 use Illuminate\Support\Arr;
 
 abstract class BaseDTO implements BaseDTOInterface

@@ -2,25 +2,23 @@
 
 namespace App\Models;
 
-use App\Enum\SubscriptionStatus;
+use App\Enum\SubscriptionStatusEnum;
 use App\Patterns\States\Subscription\ActiveState;
 use App\Patterns\States\Subscription\CanceledState;
 use App\Patterns\States\Subscription\ExpiredState;
 use App\Patterns\States\Subscription\PendingState;
 use App\Patterns\States\Subscription\SubscriptionState;
 use App\Patterns\States\Subscription\SuspendedState;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PlanSubscription extends BaseModel
 {
-
     protected $fillable = [
         'plan_id',
         'tenant_id',
         'status',
         'starts_at',
         'ends_at',
-        'trial_ends_at',
         'canceled_at',
         'auto_renew',
         'features',
@@ -28,10 +26,9 @@ class PlanSubscription extends BaseModel
     ];
 
     protected $casts = [
-        'status' => SubscriptionStatus::class,
+        'status' => SubscriptionStatusEnum::class,
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
-        'trial_ends_at' => 'datetime',
         'canceled_at' => 'datetime',
         'auto_renew' => 'boolean',
         'features' => 'array',
@@ -43,7 +40,7 @@ class PlanSubscription extends BaseModel
         return $this->belongsTo(Plan::class);
     }
 
-    public function tenant()
+    public function tenant(): BelongsTo
     {
         return $this->belongsTo(Tenant::class);
     }
@@ -58,18 +55,19 @@ class PlanSubscription extends BaseModel
         if ($this->state === null) {
             $this->initializeState();
         }
+
         return $this->state;
     }
 
     protected function initializeState(): void
     {
         $this->state = match ($this->status) {
-            SubscriptionStatus::PENDING => new PendingState($this),
-            SubscriptionStatus::ACTIVE => new ActiveState($this),
-            SubscriptionStatus::CANCELED => new CanceledState($this),
-            SubscriptionStatus::EXPIRED => new ExpiredState($this),
-            SubscriptionStatus::SUSPENDED => new SuspendedState($this),
-            SubscriptionStatus::PAST_DUE => new PastDueState($this),
+            SubscriptionStatusEnum::PENDING => new PendingState($this),
+            SubscriptionStatusEnum::ACTIVE => new ActiveState($this),
+            SubscriptionStatusEnum::CANCELED => new CanceledState($this),
+            SubscriptionStatusEnum::EXPIRED => new ExpiredState($this),
+            SubscriptionStatusEnum::SUSPENDED => new SuspendedState($this),
+            //            SubscriptionStatus::PAST_DUE => new PastDueState($this),
         };
     }
 
@@ -97,5 +95,4 @@ class PlanSubscription extends BaseModel
     {
         $this->getState()->markPastDue();
     }
-
 }

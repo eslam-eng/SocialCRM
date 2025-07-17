@@ -1,8 +1,7 @@
 <?php
 
-use App\Enum\SubscriptionStatus;
+use App\Enum\SubscriptionStatusEnum;
 use App\Models\Plan;
-use App\Models\Tenant;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +16,7 @@ return new class extends Migration
         Schema::create('plan_subscriptions', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Plan::class)->constrained();
-            $table->tinyInteger('status')->comment('active,canceled,expired,..')->default(SubscriptionStatus::PENDING->value);
+            $table->tinyInteger('status')->comment('active,canceled,expired,..')->default(SubscriptionStatusEnum::PENDING->value);
             $table->timestamp('starts_at')->nullable();
             $table->timestamp('ends_at')->nullable();
             $table->boolean('auto_renew')->default(true);

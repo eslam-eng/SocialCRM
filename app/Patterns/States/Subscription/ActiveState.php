@@ -2,7 +2,7 @@
 
 namespace App\Patterns\States\Subscription;
 
-use App\Enum\SubscriptionStatus;
+use App\Enum\SubscriptionStatusEnum;
 use App\Exceptions\SubscriptionException;
 
 class ActiveState extends SubscriptionState
@@ -17,33 +17,33 @@ class ActiveState extends SubscriptionState
     public function cancel(): void
     {
         $this->subscription->setState(new CanceledState($this->subscription));
-        $this->subscription->status = SubscriptionStatus::CANCELED;
+        $this->subscription->status = SubscriptionStatusEnum::CANCELED;
         $this->subscription->save();
     }
 
     public function expire(): void
     {
         $this->subscription->setState(new ExpiredState($this->subscription));
-        $this->subscription->status = SubscriptionStatus::EXPIRED;
+        $this->subscription->status = SubscriptionStatusEnum::EXPIRED;
         $this->subscription->save();
     }
 
     public function suspend(): void
     {
         $this->subscription->setState(new SuspendedState($this->subscription));
-        $this->subscription->status = SubscriptionStatus::SUSPENDED;
+        $this->subscription->status = SubscriptionStatusEnum::SUSPENDED;
         $this->subscription->save();
     }
 
     public function markPastDue(): void
     {
         $this->subscription->setState(new PastDueState($this->subscription));
-        $this->subscription->status = SubscriptionStatus::PAST_DUE;
+        $this->subscription->status = SubscriptionStatusEnum::PAST_DUE;
         $this->subscription->save();
     }
 
-    public function getStatus(): SubscriptionStatus
+    public function getStatus(): SubscriptionStatusEnum
     {
-        return SubscriptionStatus::ACTIVE;
+        return SubscriptionStatusEnum::ACTIVE;
     }
 }

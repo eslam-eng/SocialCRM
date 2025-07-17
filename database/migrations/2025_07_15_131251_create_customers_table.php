@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Tenant;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->tinyInteger('stage')->comment('reference to if customer new lead , hot lead,....');
             $table->ulid('tenant_id');
             $table->foreign('tenant_id')->references('id');
             $table->timestamps();

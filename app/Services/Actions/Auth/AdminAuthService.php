@@ -2,7 +2,7 @@
 
 namespace App\Services\Actions\Auth;
 
-use App\DTOS\AuthCredentialsDTO;
+use App\DTOs\AuthCredentialsDTO;
 use App\Models\User;
 use App\Services\User\AdminsService;
 use Illuminate\Support\Facades\Hash;

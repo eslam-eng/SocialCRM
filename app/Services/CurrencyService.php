@@ -3,21 +3,21 @@
 namespace App\Services;
 
 use App\DTOs\TagDTO;
-use App\Models\Filters\TagsFilter;
+use App\Models\Currency;
 use App\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class TagsService extends BaseService
+class CurrencyService extends BaseService
 {
-    protected function getFilterClass(): string
+    protected function getFilterClass(): ?string
     {
-        return TagsFilter::class;
+        return null;
     }
 
     protected function baseQuery(): Builder
     {
-        return Tag::query();
+        return Currency::query();
     }
 
     public function create(TagDTO $dto): Tag

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\DTOS;
+namespace App\DTOs;
 
-use App\DTOS\Abstract\BaseDTO;
+use App\DTOs\Abstract\BaseDTO;
 use Illuminate\Http\Request;
 
 class AuthCredentialsDTO extends BaseDTO

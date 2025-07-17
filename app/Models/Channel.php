@@ -2,9 +2,4 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Channel extends BaseModel
-{
-    //
-}
+class Channel extends BaseModel {}

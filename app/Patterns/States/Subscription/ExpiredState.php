@@ -2,7 +2,7 @@
 
 namespace App\Patterns\States\Subscription;
 
-use App\Enum\SubscriptionStatus;
+use App\Enum\SubscriptionStatusEnum;
 use App\Exceptions\SubscriptionException;
 
 class ExpiredState extends SubscriptionState
@@ -10,14 +10,14 @@ class ExpiredState extends SubscriptionState
     public function activate(): void
     {
         $this->subscription->setState(new ActiveState($this->subscription));
-        $this->subscription->status = SubscriptionStatus::ACTIVE;
+        $this->subscription->status = SubscriptionStatusEnum::ACTIVE;
         $this->subscription->save();
     }
 
     public function cancel(): void
     {
         $this->subscription->setState(new CanceledState($this->subscription));
-        $this->subscription->status = SubscriptionStatus::CANCELED;
+        $this->subscription->status = SubscriptionStatusEnum::CANCELED;
         $this->subscription->save();
     }
 
@@ -36,8 +36,8 @@ class ExpiredState extends SubscriptionState
         throw new SubscriptionException(__('subscription.cannot_mark_past_due_expired'));
     }
 
-    public function getStatus(): SubscriptionStatus
+    public function getStatus(): SubscriptionStatusEnum
     {
-        return SubscriptionStatus::EXPIRED;
+        return SubscriptionStatusEnum::EXPIRED;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Enum;
 
-enum SubscriptionStatus: int
+enum SubscriptionStatusEnum: int
 {
     case PENDING = 0;
     case ACTIVE = 1;

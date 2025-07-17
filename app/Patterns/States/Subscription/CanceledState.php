@@ -2,13 +2,11 @@
 
 namespace App\Patterns\States\Subscription;
 
-use App\Enum\SubscriptionStatus;
+use App\Enum\SubscriptionStatusEnum;
 use App\Exceptions\SubscriptionException;
-
 
 class CanceledState extends SubscriptionState
 {
-
     /**
      * @throws SubscriptionException
      */
@@ -28,10 +26,10 @@ class CanceledState extends SubscriptionState
             'subscription.already_canceled'
         ));
     }
+
     /**
      * @throws SubscriptionException
      */
-
     public function expire(): void
     {
         throw new SubscriptionException(__(
@@ -59,8 +57,8 @@ class CanceledState extends SubscriptionState
         ));
     }
 
-    public function getStatus(): SubscriptionStatus
+    public function getStatus(): SubscriptionStatusEnum
     {
-        return SubscriptionStatus::CANCELED;
+        return SubscriptionStatusEnum::CANCELED;
     }
 }

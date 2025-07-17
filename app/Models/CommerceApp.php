@@ -2,9 +2,4 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class CommerceApp extends BaseModel
-{
-    //
-}
+class CommerceApp extends BaseModel {}
