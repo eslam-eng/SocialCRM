@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('sort_order')->default(0);
             $table->integer('trial_days')->default(0);
             $table->timestamps();
+            $table->index('billing_cycle');
         });
     }
 
