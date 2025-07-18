@@ -19,6 +19,7 @@ class PlanSubscription extends BaseModel
         'status',
         'starts_at',
         'ends_at',
+        'trial_ends_at',
         'auto_renew',
     ];
 
@@ -64,6 +65,11 @@ class PlanSubscription extends BaseModel
             SubscriptionStatusEnum::SUSPENDED => new SuspendedState($this),
             //            SubscriptionStatus::PAST_DUE => new PastDueState($this),
         };
+    }
+
+    public function features()
+    {
+        return $this->belongsToMany(Feature::class, 'subscription_plan_features')->withPivot('value');
     }
 
     public function activate(): void

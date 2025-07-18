@@ -46,4 +46,9 @@ class Plan extends BaseModel
     {
         return $query->where('trial_days', '>', 0);
     }
+
+    public function planFeatures()
+    {
+        return $this->hasMany(PlanFeature::class);
+    }
 }
