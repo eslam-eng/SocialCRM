@@ -6,15 +6,12 @@ use Illuminate\Database\Eloquent\Builder;
 
 abstract class QueryFilter
 {
-
     protected $request;
-    protected $builder;
 
+    protected $builder;
 
     /**
      * QueryFilter constructor.
-     *
-     * @param array $params
      */
     public function __construct(array $params = [])
     {
@@ -23,9 +20,6 @@ abstract class QueryFilter
 
     /**
      * Apply filters in request on resource if they are implemented in the resourceFilters class
-     *
-     * @param Builder $builder
-     * @return Builder
      */
     public function apply(Builder $builder): Builder
     {
@@ -38,9 +32,10 @@ abstract class QueryFilter
 
             if (is_array($value)) {
                 $this->$name($value);
+
                 continue;
             }
-            $shouldPassValue = !is_null($value) && $value !== '';
+            $shouldPassValue = ! is_null($value) && $value !== '';
 
             $shouldPassValue
                 ? $this->$name($value)
@@ -59,5 +54,4 @@ abstract class QueryFilter
     {
         return $this->request;
     }
-
 }

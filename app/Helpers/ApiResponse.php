@@ -13,7 +13,6 @@ class ApiResponse
             'success' => true,
             'message' => $message,
             'data' => $data,
-            'errors' => [],
         ], $code);
     }
 

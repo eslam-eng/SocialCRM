@@ -8,6 +8,6 @@ enum SubscriptionStatusEnum: int
     case ACTIVE = 1;
     case CANCELED = 2;
     case EXPIRED = 3;
-    case SUSPENDED =4;
+    case SUSPENDED = 4;
     case PAST_DUE = 5;
 }

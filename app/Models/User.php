@@ -25,11 +25,9 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'phone',
-        'tenant_id',
+        'name', 'email', 'password', 'phone',
+        'tenant_id', 'locale', 'country', 'device_token',
+
     ];
 
     /**
@@ -63,7 +61,7 @@ class User extends Authenticatable
 
     public function currentTenant(): BelongsTo
     {
-        return $this->belongsTo(Tenant::class, 'current_tenant_id');
+        return $this->belongsTo(Tenant::class, 'tenant_id');
     }
 
     /**

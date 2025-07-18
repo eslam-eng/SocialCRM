@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 class Plan extends BaseModel
 {
     protected $fillable = [
@@ -11,21 +9,17 @@ class Plan extends BaseModel
         'description',
         'price',
         'billing_cycle',
-        'features',
-        'limits',
         'is_active',
         'trial_days',
         'sort_order',
-        'currency_id'
+        'currency_id',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
         'is_active' => 'boolean',
         'is_default' => 'boolean',
-        'features' => 'array' // If features is stored as JSON
     ];
-
 
     /**
      * Get the currency that owns the plan.
@@ -35,6 +29,10 @@ class Plan extends BaseModel
         return $this->belongsTo(Currency::class);
     }
 
+    public function features()
+    {
+        return $this->belongsToMany(Feature::class)->withPivot('value')->withTimestamps();
+    }
 
     /**
      * Get the subscriptions for the plan.
@@ -42,5 +40,10 @@ class Plan extends BaseModel
     public function subscriptions()
     {
         return $this->hasMany(PlanSubscription::class);
+    }
+
+    public function scopeTrial($query)
+    {
+        return $query->where('trial_days', '>', 0);
     }
 }

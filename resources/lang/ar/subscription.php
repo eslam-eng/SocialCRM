@@ -1,4 +1,5 @@
 <?php
+
 return [
     'already_active' => 'الاشتراك مفعل بالفعل.',
     'already_canceled' => 'الاشتراك ملغى بالفعل.',

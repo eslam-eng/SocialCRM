@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('emoji')->nullable();
             $table->string('description')->nullable();
             $table->ulid('tenant_id');
-            $table->foreign('tenant_id')->references('id');
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -1,4 +1,5 @@
 <?php
+
 return [
     'already_active' => 'Subscription is already active.',
     'already_canceled' => 'Subscription is already canceled.',

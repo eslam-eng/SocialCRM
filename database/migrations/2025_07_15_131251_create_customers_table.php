@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->tinyInteger('stage')->comment('reference to if customer new lead , hot lead,....');
             $table->ulid('tenant_id');
-            $table->foreign('tenant_id')->references('id');
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }

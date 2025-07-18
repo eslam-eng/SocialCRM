@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 class CustomerSegment extends BaseModel
 {
     protected $fillable = [
         'customer_id',
-        'segment_id'
+        'segment_id',
     ];
 
     /**

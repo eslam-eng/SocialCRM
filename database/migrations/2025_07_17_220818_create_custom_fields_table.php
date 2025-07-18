@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('custom_fields', function (Blueprint $table) {
             $table->id();
+            $table->ulid('tenant_id');
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
+            $table->string('field_name');
+            $table->string('field_type');
+            $table->string('model_type');
             $table->timestamps();
         });
     }

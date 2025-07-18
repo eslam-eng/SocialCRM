@@ -18,4 +18,12 @@ class AuthFormRequest extends BaseFormRequest
             'password' => ['required', 'string'],
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'identifier.required' => __('validation.identifier_required'),
+            'password.*' => __('validation.password_invalid'),
+        ];
+    }
 }

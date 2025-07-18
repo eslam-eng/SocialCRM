@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('tenant_id')->comment('current tenant as user may be belongs to multiple tenants');
             $table->string('country')->nullable();
             $table->string('device_token')->nullable();
+            $table->boolean('is_active')->default(\App\Enum\ActivationStatusEnum::ACTIVE->value);
+            $table->string('locale')->default('en');
             $table->rememberToken();
             $table->timestamps();
         });

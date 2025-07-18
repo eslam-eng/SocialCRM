@@ -3,20 +3,21 @@
 namespace App\Models;
 
 use App\Traits\HasTenantScope;
-use Illuminate\Database\Eloquent\Model;
 
 class Segment extends BaseModel
 {
     use HasTenantScope;
+
     protected $fillable = [
         'name',
         'description',
         'tenant_id',
-        'contact_count'
+        'contact_count',
+        'is_active',
     ];
 
     protected $casts = [
-        'contact_count' => 'integer'
+        'contact_count' => 'integer',
     ];
 
     /**

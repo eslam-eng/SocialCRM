@@ -7,8 +7,7 @@ use Illuminate\Support\Arr;
 
 class UsersFilter extends QueryFilter
 {
-
-    public function __construct($params = array())
+    public function __construct($params = [])
     {
         parent::__construct($params);
     }
@@ -38,7 +37,6 @@ class UsersFilter extends QueryFilter
         return $this->builder->where('username', $term);
     }
 
-
     public function usernameIn($term)
     {
         return $this->builder->whereIn('username', Arr::wrap($term));
@@ -58,5 +56,4 @@ class UsersFilter extends QueryFilter
     {
         return $this->builder->where('country', $term);
     }
-
 }

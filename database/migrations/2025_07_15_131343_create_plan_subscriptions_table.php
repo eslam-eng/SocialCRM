@@ -21,11 +21,8 @@ return new class extends Migration
             $table->timestamp('ends_at')->nullable();
             $table->boolean('auto_renew')->default(true);
             $table->ulid('tenant_id');
-            $table->foreign('tenant_id')->references('id');
-            $table->json('features')->nullable();
-            $table->json('limits')->nullable();
+            $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamp('trial_ends_at')->nullable();
-            $table->timestamp('canceled_at')->nullable();
             $table->timestamps();
         });
     }

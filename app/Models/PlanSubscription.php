@@ -19,10 +19,7 @@ class PlanSubscription extends BaseModel
         'status',
         'starts_at',
         'ends_at',
-        'canceled_at',
         'auto_renew',
-        'features',
-        'limits',
     ];
 
     protected $casts = [
@@ -31,11 +28,9 @@ class PlanSubscription extends BaseModel
         'ends_at' => 'datetime',
         'canceled_at' => 'datetime',
         'auto_renew' => 'boolean',
-        'features' => 'array',
-        'limits' => 'array',
     ];
 
-    public function plan()
+    public function plan(): BelongsTo
     {
         return $this->belongsTo(Plan::class);
     }

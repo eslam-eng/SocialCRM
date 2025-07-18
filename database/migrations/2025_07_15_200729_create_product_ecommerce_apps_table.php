@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('external_id')->nullable(); // ID of the product on the platform
             $table->decimal('price', 10, 2)->nullable(); // optional override
             $table->unsignedInteger('stock')->nullable();
-            $table->unique(['product_id', 'commerce_app_id','external_id']);
+            $table->unique(['product_id', 'commerce_app_id', 'external_id'], 'unique_platform_product');
             $table->timestamps();
         });
     }

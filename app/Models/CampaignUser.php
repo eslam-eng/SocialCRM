@@ -6,7 +6,7 @@ class CampaignUser extends BaseModel
 {
     protected $fillable = [
         'campaign_id',
-        'user_id'
+        'user_id',
     ];
 
     /**

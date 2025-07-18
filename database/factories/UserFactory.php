@@ -2,15 +2,17 @@
 
 namespace Database\Factories;
 
+use App\Enum\ActivationStatusEnum;
+use App\Models\Tenant;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
- */
 class UserFactory extends Factory
 {
+    protected $model = User::class;
+
     /**
      * The current password being used by the factory.
      */
@@ -23,13 +25,41 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $tenant = Tenant::query()->inRandomOrder()->first() ?? Tenant::factory()->create();
+
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
             'password' => static::$password ??= Hash::make('password'),
+            'phone' => $this->faker->phoneNumber(),
+            'tenant_id' => $tenant->id,
+            'locale' => $this->faker->randomElement(['en', 'ar']),
+            'country' => $this->faker->countryCode(),
+            'device_token' => Str::random(64),
+            'is_active' => ActivationStatusEnum::ACTIVE->value,
+            'email_verified_at' => now(),
             'remember_token' => Str::random(10),
         ];
+    }
+
+    /**
+     * Set a specific tenant ID for the user.
+     */
+    public function forTenant(string $tenantId): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'tenant_id' => $tenantId,
+        ]);
+    }
+
+    /**
+     * Indicate that the user is inactive.
+     */
+    public function inactive(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'is_active' => ActivationStatusEnum::INACTIVE->value,
+        ]);
     }
 
     /**

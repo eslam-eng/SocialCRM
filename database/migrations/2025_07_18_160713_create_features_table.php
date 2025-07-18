@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tenants', function (Blueprint $table) {
-            $table->ulid('id')->primary();
-            $table->string('name');
-            $table->string('domain');
-            $table->boolean('is_active')->default(false);
-            $table->integer('users_count')->default(0);
+        Schema::create('features', function (Blueprint $table) {
+            $table->id();
+            $table->string('key')->unique();
+            $table->json('name');
+            $table->enum('group', ['limit', 'feature']); // limit = numeric quota, feature = boolean
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tenants');
+        Schema::dropIfExists('features');
     }
 };
