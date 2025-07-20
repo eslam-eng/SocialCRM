@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
 class SocialAccount extends BaseModel
 {
     protected $fillable = [
-        'tenant_id',
         'user_id',
         'provider_name',
         'provider_id',
@@ -16,7 +17,7 @@ class SocialAccount extends BaseModel
         'scopes',
     ];
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
