@@ -55,7 +55,7 @@ class AppServiceProvider extends ServiceProvider
             ];
         });
 
-        RateLimiter::for('password_reset', function (Request $request) {
+        RateLimiter::for('verification_code', function (Request $request) {
             return Limit::perMinute(1)->by($request->input('email'))
                 ->response(function (Request $request, array $headers) {
                     $retryAfter = $headers['Retry-After'] ?? 60;

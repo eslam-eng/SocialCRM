@@ -8,18 +8,25 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\Api\AuthUserResource;
 use App\Services\Actions\Auth\RegisterService;
+use App\Services\Actions\Auth\VerificationCodeService;
 
 class RegisterController extends Controller
 {
     /**
      * @throws \Throwable
      */
-    public function __invoke(RegisterRequest $request, RegisterService $registerService)
+    public function __invoke(RegisterRequest $request, RegisterService $registerService, VerificationCodeService $verificationCodeService)
     {
         try {
             $userDTO = UserDTO::fromRequest($request);
 
             $user = $registerService->handle(registerDTO: $userDTO);
+
+            $verificationCodeService->sendVerificationCode(
+                email: $user->email,
+                type: 'email_verification',
+                userName: $user->name
+            );
 
             $data = [
                 'token' => $user->generateToken(),

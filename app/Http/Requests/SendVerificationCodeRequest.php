@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-class SendRestCodeRequest extends BaseFormRequest
+class SendVerificationCodeRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

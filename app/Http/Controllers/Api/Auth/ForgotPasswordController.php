@@ -6,17 +6,24 @@ use App\DTOs\RestPasswordDTO;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RestPasswordRequest;
-use App\Http\Requests\SendRestCodeRequest;
+use App\Http\Requests\SendVerificationCodeRequest;
 use App\Services\Actions\Auth\ForgetPasswordService;
+use App\Services\Actions\Auth\VerificationCodeService;
 use Illuminate\Validation\ValidationException;
 
 class ForgotPasswordController extends Controller
 {
-    public function __construct(protected readonly ForgetPasswordService $forgetPasswordService) {}
-
-    public function sendResetCode(SendRestCodeRequest $request)
+    public function __construct(protected readonly ForgetPasswordService $forgetPasswordService, private readonly VerificationCodeService $verificationService)
     {
-        $this->forgetPasswordService->sendResetCode(email: $request->email);
+    }
+
+
+    public function sendVerificationCode(SendVerificationCodeRequest $request)
+    {
+        $this->verificationService->sendVerificationCode(
+            email: $request->email,
+            type: 'reset_password'
+        );
 
         return ApiResponse::success(message: 'Reset code sent to your email, check your inbox');
     }

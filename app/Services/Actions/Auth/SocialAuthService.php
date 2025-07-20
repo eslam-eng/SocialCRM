@@ -2,9 +2,9 @@
 
 namespace App\Services\Actions\Auth;
 
-use App\DTOs\SocialAuthDTO;
 use App\DTOs\UserDTO;
 use App\Enum\AvailableSocialProvidersEnum;
+use App\Events\UserRegistered;
 use App\Models\SocialAccount;
 use App\Models\User;
 use Laravel\Socialite\Facades\Socialite;
@@ -13,22 +13,24 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 readonly class SocialAuthService
 {
-    public function __construct(protected RegisterService $registerService) {}
+    public function __construct(protected RegisterService $registerService)
+    {
+    }
 
     /**
      * Attempt to login with credentials and return user or unauthorized exception.
      *
      * @throws UnauthorizedHttpException
      */
-    public function handle(SocialAuthDTO $socialAuthDTO): User
+    public function handle(string $provider_name): User
     {
         // check that provider name in available providers
-        if (! in_array($socialAuthDTO->provider_name, AvailableSocialProvidersEnum::values())) {
+        if (!in_array($provider_name, AvailableSocialProvidersEnum::values())) {
             throw new BadRequestHttpException('Provider not found');
         }
 
-        $oauthUser = Socialite::driver($socialAuthDTO->provider_name)->stateless()->userFromToken($socialAuthDTO->access_token);
-        $socialAccount = SocialAccount::where('provider_name', $socialAuthDTO->provider_name)
+        $oauthUser = Socialite::driver($provider_name)->stateless()->user();;
+        $socialAccount = SocialAccount::where('provider_name', $provider_name)
             ->where('provider_id', $oauthUser->getId())
             ->first();
         if ($socialAccount) {
@@ -42,18 +44,22 @@ readonly class SocialAuthService
         $userDTO = new UserDTO(name: $name, organization_name: $name, email: $email);
         // check if user exists before with same email
         $user = User::query()->firstWhere('email', value: $email);
-        if (! $user) {
+        if (!$user) {
             $user = $this->registerService->handle($userDTO);
+            $user->update(['email_verified_at' => now()]);
+            event(new UserRegistered($user));
         }
 
         $user->socialAccounts()->create([
-            'provider_name' => $socialAuthDTO->provider_name,
+            'provider_name' => $provider_name,
             'provider_id' => $oauthUser->getId(),
-            'access_token' => encrypt($oauthUser->token),
-            'refresh_token' => encrypt($oauthUser->refreshToken ?? ''),
+            'access_token' => $oauthUser->token,
+            'refresh_token' => $oauthUser->refreshToken ?? null,
             'expires_in' => $oauthUser->expiresIn,
             'avatar' => $oauthUser->getAvatar(),
         ]);
+
+        auth()->login($user);
 
         return $user;
     }

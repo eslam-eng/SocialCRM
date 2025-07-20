@@ -2,29 +2,31 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\DTOs\SocialAuthDTO;
+use App\Enum\AvailableSocialProvidersEnum;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SocialAuthRequest;
 use App\Http\Resources\Api\AuthUserResource;
 use App\Services\Actions\Auth\SocialAuthService;
+use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 
-class SocialAuthController extends Controller
+class GoogleAuthController extends Controller
 {
-    public function __construct(protected readonly SocialAuthService $socialAuthService) {}
-
-    public function redirectToProvider(string $provider)
+    public function __construct(protected readonly SocialAuthService $socialAuthService)
     {
-        return Socialite::driver($provider)->redirect();
     }
 
-    public function authenticate(SocialAuthRequest $request)
+    public function redirectToProvider(string $provider = 'google')
+    {
+        $url = Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
+        return ApiResponse::success(data: ['url' => $url]);
+    }
+
+    public function authenticate(Request $request)
     {
         try {
-            $socialAuthDTO = SocialAuthDTO::fromRequest($request);
 
-            $user = $this->socialAuthService->handle(socialAuthDTO: $socialAuthDTO);
+            $user = $this->socialAuthService->handle(provider_name: AvailableSocialProvidersEnum::GOOGLE->value);
 
             $token = $user->generateToken();
 
