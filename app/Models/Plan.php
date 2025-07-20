@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Enum\FeatureGroupEnum;
 use App\Enum\SubscriptionDurationEnum;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Plan extends BaseModel
 {
+    use SoftDeletes;
     protected $fillable = [
         'name',
         'description',
@@ -27,6 +31,20 @@ class Plan extends BaseModel
     public function features()
     {
         return $this->belongsToMany(Feature::class)->withPivot('value')->withTimestamps();
+    }
+
+    public function limitFeatures(): BelongsToMany
+    {
+        return $this->belongsToMany(Feature::class)
+            ->where('type', FeatureGroupEnum::LIMIT->value)
+            ->withPivot('value');
+    }
+
+    public function addonFeatures(): BelongsToMany
+    {
+        return $this->belongsToMany(Feature::class)
+            ->where('type',  FeatureGroupEnum::FEATURE->value)
+            ->withPivot('value');
     }
 
     /**

@@ -6,9 +6,11 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PlanFeature extends BaseModel
 {
-    protected $fillable = ['plan_id',
+    protected $fillable = [
+        'plan_id',
         'feature_id',
         'value',
+        'is_unlimited'
     ];
 
     public function plan(): BelongsTo

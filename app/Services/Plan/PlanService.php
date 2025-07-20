@@ -2,11 +2,14 @@
 
 namespace App\Services\Plan;
 
+use App\DTOs\PlanDTO;
+use App\Models\Currency;
 use App\Models\Filters\PlansFilters;
 use App\Models\Plan;
 use App\Services\BaseService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
 
 class PlanService extends BaseService
 {
@@ -30,12 +33,35 @@ class PlanService extends BaseService
         return $this->getQuery(filters: $filters, withRelation: $withRelation)->paginate();
     }
 
-    public function create()
+    /**
+     * @throws \Throwable
+     */
+    public function create(PlanDTO $planDTO)
     {
-        // $basicPlan->features()->attach([
-        //    Feature::where('name', 'max_users')->first()->id => ['value' => 5],
-        //    Feature::where('name', 'ai_enabled')->first()->id => ['value' => false],
-        //    Feature::where('name', 'channel_integration')->first()->id => ['value' => true]
-        // ]);
+        $limitsToAttach = collect($planDTO->limits)
+            ->mapWithKeys(function ($value, $id) {
+                return [$id => ['value' => $value]];
+            })
+            ->all();
+
+        $featuresToAttach = collect($planDTO->limits)
+            ->mapWithKeys(function ($value, $id) {
+                return [$id => ['value' => $value]];
+            })
+            ->all();
+
+
+        return DB::transaction(function () use ($planDTO, $featuresToAttach, $limitsToAttach) {
+            $plan = $this->getQuery()->create($planDTO->toArray());
+            $allFeaturesToAttach = array_merge($featuresToAttach, $limitsToAttach);
+            $plan->features()->attach($allFeaturesToAttach);
+            return $plan;
+        });
+    }
+
+    public function delete(int $plan_id): ?bool
+    {
+        $plan = $this->findById($plan_id);
+        return $plan->delete();
     }
 }

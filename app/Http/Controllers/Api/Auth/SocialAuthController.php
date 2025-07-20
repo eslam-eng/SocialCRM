@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\DTOs\SocialAuthDTO;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SocialAuthRequest;
 use App\Http\Resources\Api\AuthUserResource;
 use App\Services\Actions\Auth\SocialAuthService;
 use Laravel\Socialite\Facades\Socialite;
@@ -17,10 +19,12 @@ class SocialAuthController extends Controller
         return Socialite::driver($provider)->redirect();
     }
 
-    public function authenticate(string $provider)
+    public function authenticate(SocialAuthRequest $request)
     {
         try {
-            $user = $this->socialAuthService->handle(provider_name: $provider);
+            $socialAuthDTO = SocialAuthDTO::fromRequest($request);
+
+            $user = $this->socialAuthService->handle(socialAuthDTO: $socialAuthDTO);
 
             $token = $user->generateToken();
 

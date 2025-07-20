@@ -25,6 +25,7 @@ class SocialAuthRequest extends FormRequest
     {
         return [
             'provider_name' => ['required', 'string', Rule::in(AvailableSocialProvidersEnum::values())],
+            'access_token'=>'required|string'
         ];
     }
 }

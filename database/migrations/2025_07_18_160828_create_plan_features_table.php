@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('plan_id')->constrained()->onDelete('cascade');
             $table->foreignId('feature_id')->constrained()->onDelete('cascade');
             $table->string('value'); // "true", "10", "1000", etc.
+            $table->boolean('is_unlimited')->default(\App\Enum\ActivationStatusEnum::INACTIVE->value);
             $table->timestamps();
         });
     }

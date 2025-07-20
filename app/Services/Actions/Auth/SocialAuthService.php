@@ -2,6 +2,7 @@
 
 namespace App\Services\Actions\Auth;
 
+use App\DTOs\SocialAuthDTO;
 use App\DTOs\UserDTO;
 use App\Enum\AvailableSocialProvidersEnum;
 use App\Models\SocialAccount;
@@ -19,15 +20,15 @@ readonly class SocialAuthService
      *
      * @throws UnauthorizedHttpException
      */
-    public function handle(string $provider_name): User
+    public function handle(SocialAuthDTO $socialAuthDTO): User
     {
         // check that provider name in available providers
-        if (! in_array($provider_name, AvailableSocialProvidersEnum::values())) {
+        if (! in_array($socialAuthDTO->provider_name, AvailableSocialProvidersEnum::values())) {
             throw new BadRequestHttpException('Provider not found');
         }
 
-        $oauthUser = Socialite::driver($provider_name)->stateless()->user();
-        $socialAccount = SocialAccount::where('provider_name', $provider_name)
+        $oauthUser = Socialite::driver($socialAuthDTO->provider_name)->stateless()->userFromToken($socialAuthDTO->access_token);
+        $socialAccount = SocialAccount::where('provider_name', $socialAuthDTO->provider_name)
             ->where('provider_id', $oauthUser->getId())
             ->first();
         if ($socialAccount) {
@@ -46,7 +47,7 @@ readonly class SocialAuthService
         }
 
         $user->socialAccounts()->create([
-            'provider_name' => $provider_name,
+            'provider_name' => $socialAuthDTO->provider_name,
             'provider_id' => $oauthUser->getId(),
             'access_token' => encrypt($oauthUser->token),
             'refresh_token' => encrypt($oauthUser->refreshToken ?? ''),

@@ -28,8 +28,8 @@ class PlanResource extends JsonResource
             'billing_cycle_text' => ActivationStatusEnum::from($this->billing_cycle)->getLabel(),
             'trial_days' => $this->trial_days,
             'refund_days' => $this->refund_days,
-            'features' => FeatureResource::collection($this->whenLoaded('features')->where('type', FeatureGroupEnum::FEATURE->value)),
-            'limits' => FeatureResource::collection($this->whenLoaded('features')->where('type', FeatureGroupEnum::LIMIT->value)),
+            'features' => FeatureResource::collection($this->whenLoaded('limitFeatures')),
+            'limits' => FeatureResource::collection($this->whenLoaded('addonFeatures')),
         ];
     }
 }
