@@ -3,7 +3,6 @@
 namespace App\Services\Plan;
 
 use App\DTOs\PlanDTO;
-use App\Models\Currency;
 use App\Models\Filters\PlansFilters;
 use App\Models\Plan;
 use App\Services\BaseService;
@@ -50,11 +49,11 @@ class PlanService extends BaseService
             })
             ->all();
 
-
         return DB::transaction(function () use ($planDTO, $featuresToAttach, $limitsToAttach) {
             $plan = $this->getQuery()->create($planDTO->toArray());
             $allFeaturesToAttach = array_merge($featuresToAttach, $limitsToAttach);
             $plan->features()->attach($allFeaturesToAttach);
+
             return $plan;
         });
     }
@@ -62,6 +61,7 @@ class PlanService extends BaseService
     public function delete(int $plan_id): ?bool
     {
         $plan = $this->findById($plan_id);
+
         return $plan->delete();
     }
 }

@@ -20,7 +20,7 @@ Route::prefix('auth')->middleware(['throttle:verification_code'])->group(functio
     Route::post('reset-password', [ForgotPasswordController::class, 'resetPassword']);
 });
 
-Route::group(['middleware' => ['auth:sanctum','locale']], function () {
+Route::group(['middleware' => ['auth:sanctum', 'locale']], function () {
     // Email verification routes
     Route::prefix('email')->group(function () {
         Route::post('verify', [EmailVerificationController::class, 'verify']);
@@ -30,6 +30,5 @@ Route::group(['middleware' => ['auth:sanctum','locale']], function () {
     Route::group(['middleware' => 'verified'], function () {
         Route::resource('segments', SegmentController::class);
     });
-
 
 });

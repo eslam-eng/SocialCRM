@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 class CleanupVerificationCodes extends Command
 {
     protected $signature = 'verification-codes:cleanup';
+
     protected $description = 'Clean up expired verification codes';
 
     public function handle()
@@ -15,5 +16,4 @@ class CleanupVerificationCodes extends Command
         $deleted = VerificationCode::where('expires_at', '<', now()->subDays(2))->delete();
         $this->info("Deleted {$deleted} expired verification codes.");
     }
-
 }

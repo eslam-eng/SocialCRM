@@ -19,8 +19,8 @@ class ValidCurrencyCode implements ValidationRule
         $jsonContents = file_get_contents($file);
 
         $currenciesData = json_decode($jsonContents, true); // decode as associative array
-        $currenciesData =  array_column($currenciesData, 'code');
-        if (!in_array($value, $currenciesData)) {
+        $currenciesData = array_column($currenciesData, 'code');
+        if (! in_array($value, $currenciesData)) {
             $fail('validation.currency_code')->translate();
         }
     }

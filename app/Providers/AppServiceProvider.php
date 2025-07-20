@@ -40,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
                 Limit::perMinute(1000),
                 Limit::perMinute(3)->by($request->input('email'))->response(function (Request $request, array $headers) {
                     $retryAfter = $headers['Retry-After'] ?? 60;
+
                     return ApiResponse::error(message: "Too many attempts. Try again in {$retryAfter} seconds.", code: 429);
                 }),
             ];
@@ -50,6 +51,7 @@ class AppServiceProvider extends ServiceProvider
                 Limit::perMinute(500),
                 Limit::perMinute(3)->by($request->input('email'))->response(function (Request $request, array $headers) {
                     $retryAfter = $headers['Retry-After'] ?? 60;
+
                     return ApiResponse::error(message: "Too many attempts. Try again in {$retryAfter} seconds.", code: 429);
                 }),
             ];
@@ -59,6 +61,7 @@ class AppServiceProvider extends ServiceProvider
             return Limit::perMinute(1)->by($request->input('email'))
                 ->response(function (Request $request, array $headers) {
                     $retryAfter = $headers['Retry-After'] ?? 60;
+
                     return ApiResponse::error(message: "Too many password reset attempts for this email. Try again in {$retryAfter} seconds.", code: 429);
                 });
         });

@@ -13,9 +13,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PlanController extends Controller
 {
-    public function __construct(protected PlanService $planService)
-    {
-    }
+    public function __construct(protected PlanService $planService) {}
 
     /**
      * Display a listing of the resource.
@@ -25,6 +23,7 @@ class PlanController extends Controller
         $filters = $request->get('filters');
         $withRelations = ['limitFeatures', 'addonFeatures'];
         $plans = $this->planService->paginate(filters: $filters, withRelation: $withRelations);
+
         return PlanResource::collection($plans);
 
     }
@@ -36,6 +35,7 @@ class PlanController extends Controller
     {
         $planDTO = PlanDTO::fromRequest($request);
         $plan = $this->planService->create(planDTO: $planDTO);
+
         return PlanResource::make($plan->loadMissing(['limitFeatures', 'addonFeatures']));
 
     }
@@ -63,6 +63,7 @@ class PlanController extends Controller
     {
         try {
             $this->planService->delete($id);
+
             return ApiResponse::success(message: 'Plan deleted successfully');
         } catch (NotFoundHttpException $e) {
             return ApiResponse::notFound(message: 'Plan not found');

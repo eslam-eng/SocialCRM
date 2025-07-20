@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Plan extends BaseModel
 {
     use SoftDeletes;
+
     protected $fillable = [
         'name',
         'description',
@@ -43,7 +44,7 @@ class Plan extends BaseModel
     public function addonFeatures(): BelongsToMany
     {
         return $this->belongsToMany(Feature::class)
-            ->where('type',  FeatureGroupEnum::FEATURE->value)
+            ->where('type', FeatureGroupEnum::FEATURE->value)
             ->withPivot('value');
     }
 

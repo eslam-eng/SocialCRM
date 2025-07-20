@@ -26,11 +26,10 @@ class VerificationCodeService extends BaseService
      * Generate and send verification code
      */
     public function sendVerificationCode(
-        string  $email,
-        string  $type,
+        string $email,
+        string $type,
         ?string $userName = null,
-    ): string
-    {
+    ): string {
         // Invalidate any existing active codes
         $this->getQuery()->where('email', $email)
             ->where('type', $type)->delete();
@@ -56,6 +55,7 @@ class VerificationCodeService extends BaseService
 
     /**
      * Verify the code
+     *
      * @throws CodeNotFoundException
      * @throws MaxAttemptsExceededException
      * @throws CodeExpiredException
@@ -68,29 +68,28 @@ class VerificationCodeService extends BaseService
             ->latest()
             ->first();
 
-        if (!$verificationCode) {
-            throw new CodeNotFoundException();
+        if (! $verificationCode) {
+            throw new CodeNotFoundException;
         }
         if ($verificationCode->isExpired()) {
             $verificationCode->delete();
-            throw new CodeExpiredException();
+            throw new CodeExpiredException;
         }
         if ($verificationCode->hasExceededMaxAttempts()) {
             $verificationCode->delete();
-            throw new MaxAttemptsExceededException();
+            throw new MaxAttemptsExceededException;
         }
         // Increment attempts before checking code
         $verificationCode->increment('attempts');
 
         if ($verificationCode->code === $code) {
             $verificationCode->delete();
+
             return true;
         }
 
-// If we reach here, the code didn't match
-        throw new CodeNotFoundException();
-
-
+        // If we reach here, the code didn't match
+        throw new CodeNotFoundException;
     }
 
     /**
@@ -98,7 +97,7 @@ class VerificationCodeService extends BaseService
      */
     private function generateCode(int $length): string
     {
-        return str_pad((string)random_int(0, pow(10, $length) - 1), $length, '0', STR_PAD_LEFT);
+        return str_pad((string) random_int(0, pow(10, $length) - 1), $length, '0', STR_PAD_LEFT);
     }
 
     /**

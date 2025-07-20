@@ -13,10 +13,7 @@ use Illuminate\Validation\ValidationException;
 
 class ForgotPasswordController extends Controller
 {
-    public function __construct(protected readonly ForgetPasswordService $forgetPasswordService, private readonly VerificationCodeService $verificationService)
-    {
-    }
-
+    public function __construct(protected readonly ForgetPasswordService $forgetPasswordService, private readonly VerificationCodeService $verificationService) {}
 
     public function sendVerificationCode(SendVerificationCodeRequest $request)
     {

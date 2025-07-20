@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 class VerificationCode extends BaseModel
 {
     protected $fillable = [
@@ -27,5 +25,4 @@ class VerificationCode extends BaseModel
     {
         return $this->attempts >= 5; // Configure max attempts as needed
     }
-
 }

@@ -20,6 +20,7 @@ class AdminAuthController
                 'user' => $admin,
                 'token' => $token,
             ];
+
             return ApiResponse::success(data: $data);
         } catch (UnauthorizedHttpException $e) {
             return ApiResponse::unauthorized(__('auth.failed'), []);

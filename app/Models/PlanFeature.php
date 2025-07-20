@@ -10,7 +10,7 @@ class PlanFeature extends BaseModel
         'plan_id',
         'feature_id',
         'value',
-        'is_unlimited'
+        'is_unlimited',
     ];
 
     public function plan(): BelongsTo

@@ -11,7 +11,7 @@ class EnsureEmailIsVerified
     public function handle(Request $request, Closure $next)
     {
 
-        if (!$request->user() || !$request->user()->email_verified_at) {
+        if (! $request->user() || ! $request->user()->email_verified_at) {
             return ApiResponse::error(
                 message: 'Email not verified. Please verify your email to access this resource.',
                 code: 403

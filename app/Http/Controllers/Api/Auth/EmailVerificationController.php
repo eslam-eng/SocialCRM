@@ -16,16 +16,14 @@ class EmailVerificationController extends Controller
 {
     public function __construct(
         private readonly VerificationCodeService $verificationService,
-        private readonly UserService             $userService
-    )
-    {
-    }
+        private readonly UserService $userService
+    ) {}
 
     public function verify(VerifyEmailRequest $request)
     {
         try {
             $user = $this->userService->findByKey('email', $request->email);
-            if (!$user) {
+            if (! $user) {
                 return ApiResponse::error(
                     message: 'User not found',
                     code: 404
@@ -58,7 +56,7 @@ class EmailVerificationController extends Controller
     {
         $user = $this->userService->findByKey('email', $request->email);
 
-        if (!$user) {
+        if (! $user) {
             return ApiResponse::error(
                 message: 'User not found',
                 code: 404

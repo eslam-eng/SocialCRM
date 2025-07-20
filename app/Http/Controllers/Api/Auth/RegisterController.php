@@ -32,6 +32,7 @@ class RegisterController extends Controller
                 'token' => $user->generateToken(),
                 'user' => AuthUserResource::make($user),
             ];
+
             return ApiResponse::success(data: $data);
         } catch (\Exception $e) {
             return ApiResponse::error(message: 'there is an error please try again later or contact with support for fast response');

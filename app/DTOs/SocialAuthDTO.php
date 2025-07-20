@@ -3,7 +3,6 @@
 namespace App\DTOs;
 
 use App\DTOs\Abstract\BaseDTO;
-use App\Enum\ActivationStatusEnum;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 

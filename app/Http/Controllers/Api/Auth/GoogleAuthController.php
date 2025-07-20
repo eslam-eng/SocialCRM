@@ -12,13 +12,12 @@ use Laravel\Socialite\Facades\Socialite;
 
 class GoogleAuthController extends Controller
 {
-    public function __construct(protected readonly SocialAuthService $socialAuthService)
-    {
-    }
+    public function __construct(protected readonly SocialAuthService $socialAuthService) {}
 
     public function redirectToProvider(string $provider = 'google')
     {
         $url = Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
+
         return ApiResponse::success(data: ['url' => $url]);
     }
 

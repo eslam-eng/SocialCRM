@@ -31,7 +31,7 @@ class PlanRequest extends FormRequest
             'billing_cycle' => ['required', Rule::in(SubscriptionDurationEnum::values())],
             'is_active' => 'required|boolean',
             'trial_days' => 'required|integer|min:1',
-            'currency_code' => ['required','string',new ValidCurrencyCode()],
+            'currency_code' => ['required', 'string', new ValidCurrencyCode],
             'refund_days' => 'nullable|integer|min:0',
             'features' => 'array|nullable|min:1',
             'limits' => 'array|nullable|min:1',
