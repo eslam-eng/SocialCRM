@@ -11,16 +11,14 @@ use Illuminate\Support\Arr;
 class SubscriptionPlanDTO extends BaseDTO
 {
     public function __construct(
-        public int     $plan_id,
-        public string  $tenant_id,
-        public string  $starts_at,
-        public string  $ends_at,
+        public int $plan_id,
+        public string $tenant_id,
+        public string $starts_at,
+        public string $ends_at,
         public bool $auto_renew = ActivationStatusEnum::INACTIVE->value,
         public ?string $trial_ends_at = null,
         public ?string $status = SubscriptionStatusEnum::ACTIVE->value,
-    )
-    {
-    }
+    ) {}
 
     public static function fromArray(array $data): static
     {

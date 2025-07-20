@@ -19,7 +19,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->unique(['group', 'name']);
+            $table->unique(['group', 'name', 'tenant_id']);
         });
     }
 };

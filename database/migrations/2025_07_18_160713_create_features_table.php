@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -13,9 +14,10 @@ return new class extends Migration {
         Schema::create('features', function (Blueprint $table) {
             $table->id();
             $table->string('key')->unique();
-            $table->json('name');//as it will be translatable
+            $table->json('name'); // as it will be translatable
             $table->enum('group', ['limit', 'feature']); // limit = numeric quota, feature = boolean
             $table->text('description')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

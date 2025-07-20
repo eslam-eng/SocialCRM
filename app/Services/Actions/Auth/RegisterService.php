@@ -5,6 +5,9 @@ namespace App\Services\Actions\Auth;
 use App\DTOs\SubscriptionPlanDTO;
 use App\DTOs\TenantDTO;
 use App\DTOs\UserDTO;
+use App\Models\Plan;
+use App\Models\PlanSubscription;
+use App\Models\Tenant;
 use App\Models\User;
 use App\Services\Plan\PlanService;
 use App\Services\Plan\PlanSubscriptionService;
@@ -19,44 +22,78 @@ readonly class RegisterService
      * Inject UsersService via constructor.
      */
     public function __construct(
-        protected UserService             $userService,
-        protected TenantService           $tenantService,
-        protected PlanService             $planService,
+        protected UserService $userService,
+        protected TenantService $tenantService,
+        protected PlanService $planService,
         protected PlanSubscriptionService $planSubscriptionService
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws \Throwable
      */
     public function handle(UserDTO $registerDTO): User
     {
-        return DB::transaction(function () use ($registerDTO) {
-            // 1- create tenant with organization data
-            $tenantDTO = new TenantDTO(name: $registerDTO->organization_name, slug: Str::slug($registerDTO->organization_name));
-            $tenant = $this->tenantService->create($tenantDTO);
+        return DB::transaction(fn () => $this->registerUserWithTenant($registerDTO));
+    }
 
-            // 2- create user and link with this tenant and Attach to tenant_user pivot
-            $registerDTO->tenant_id = $tenant->id;
-            $user = $this->userService->create($registerDTO);
-            $tenant->users()->attach($user->id);
+    private function registerUserWithTenant(UserDTO $registerDTO): User
+    {
+        $tenant = $this->createTenantFromDTO($registerDTO);
+        $user = $this->createAndLinkUser($registerDTO, $tenant);
+        $this->setupFreeTrial($tenant);
 
-            // 3- make subscription free with free trial
-            $plan = $this->planService->getFreePlan();
-            //create subscription with status free trial and ends at date time
-            $subscriptionPlanDTO = new SubscriptionPlanDTO(
-                plan_id: $plan->id,
-                tenant_id: $tenant->id,
-                starts_at: now(),
-                ends_at: now()->addDays($plan->trial_days),
-                trial_ends_at: now()->addDays($plan->trial_days)
-            );
-            $subscription = $this->planSubscriptionService->create($subscriptionPlanDTO);
-            //take snapshot of features for the subscription ans store them
+        return $user;
+    }
 
-            return $user;
-        });
+    private function createTenantFromDTO(UserDTO $registerDTO): Tenant
+    {
+        $tenantDTO = new TenantDTO(
+            name: $registerDTO->organization_name,
+            slug: Str::slug($registerDTO->organization_name)
+        );
 
+        return $this->tenantService->create($tenantDTO);
+    }
+
+    private function createAndLinkUser(UserDTO $registerDTO, Tenant $tenant): User
+    {
+        $registerDTO->tenant_id = $tenant->id;
+        $user = $this->userService->create($registerDTO);
+        $tenant->users()->attach($user->id);
+
+        return $user;
+    }
+
+    private function setupFreeTrial(Tenant $tenant): void
+    {
+        $plan = $this->planService->getFreePlan();
+        $subscription = $this->createTrialSubscription($tenant, $plan);
+        $this->attachPlanFeatures($subscription, $plan);
+    }
+
+    private function createTrialSubscription(Tenant $tenant, Plan $plan): PlanSubscription
+    {
+        $trialEndsAt = now()->addDays($plan->trial_days);
+
+        $subscriptionPlanDTO = new SubscriptionPlanDTO(
+            plan_id: $plan->id,
+            tenant_id: $tenant->id,
+            starts_at: now(),
+            ends_at: $trialEndsAt,
+            trial_ends_at: $trialEndsAt
+        );
+
+        return $this->planSubscriptionService->create($subscriptionPlanDTO);
+    }
+
+    private function attachPlanFeatures(PlanSubscription $subscription, Plan $plan): void
+    {
+        $featuresToAttach = collect($plan->features)
+            ->mapWithKeys(fn ($feature) => [
+                $feature->id => ['value' => $feature->pivot->value],
+            ])
+            ->all();
+
+        $subscription->features()->attach($featuresToAttach);
     }
 }

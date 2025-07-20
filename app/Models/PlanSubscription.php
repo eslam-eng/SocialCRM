@@ -69,7 +69,8 @@ class PlanSubscription extends BaseModel
 
     public function features()
     {
-        return $this->belongsToMany(Feature::class, 'subscription_plan_features')->withPivot('value');
+        return $this->belongsToMany(Feature::class, 'subscription_plan_features')
+            ->withPivot('value')->using(SubscriptionPlanFeature::class);
     }
 
     public function activate(): void

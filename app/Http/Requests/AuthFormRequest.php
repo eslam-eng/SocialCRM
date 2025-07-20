@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Api;
-
-use App\Http\Requests\BaseFormRequest;
+namespace App\Http\Requests;
 
 class AuthFormRequest extends BaseFormRequest
 {

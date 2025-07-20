@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\DTOs\AuthCredentialsDTO;
 use App\Helpers\ApiResponse;
-use App\Http\Requests\Api\AuthFormRequest;
+use App\Http\Requests\AuthFormRequest;
 use App\Services\Actions\Auth\AdminAuthService;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 

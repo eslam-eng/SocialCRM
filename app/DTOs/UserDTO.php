@@ -12,9 +12,9 @@ class UserDTO extends BaseDTO
         public string $name,
         public string $organization_name,
         public string $email,
-        public string $password,
-        public string $phone,
-        public string $tenant_id,
+        public ?string $password = null,
+        public ?string $phone = null,
+        public ?string $tenant_id = null,
     ) {}
 
     public static function fromArray(array $data): static

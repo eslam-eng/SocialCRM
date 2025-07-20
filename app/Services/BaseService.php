@@ -12,7 +12,7 @@ abstract class BaseService
      * Get the query builder with optional filters.
      * Child classes must implement getFilterClass() to specify their filter.
      */
-    public function getQuery(?array $filters = []): ?Builder
+    public function getQuery(?array $filters = [], array $withRelation = []): ?Builder
     {
         $query = $this->baseQuery();
         $filterClass = $this->getFilterClass();
@@ -20,7 +20,7 @@ abstract class BaseService
             $query = $query->filter(new $filterClass($filters));
         }
 
-        return $query;
+        return $query->with($withRelation);
     }
 
     /**
@@ -38,9 +38,9 @@ abstract class BaseService
      *
      * @param  mixed  $id
      */
-    public function findById($id): ?Model
+    public function findById($id, array $withRelation = []): ?Model
     {
-        $model = $this->baseQuery()->find($id);
+        $model = $this->baseQuery()->with($withRelation)->find($id);
         if (! $model) {
             throw new NotFoundHttpException('resource not found');
         }
@@ -53,9 +53,9 @@ abstract class BaseService
      *
      * @param  mixed  $value
      */
-    public function findByKey(string $key, $value): ?Model
+    public function findByKey(string $key, string $value, array $withRelation = []): ?Model
     {
-        return $this->baseQuery()->where($key, $value)->first();
+        return $this->baseQuery()->with($withRelation)->where($key, $value)->first();
     }
 
     // Add more shared methods as needed...

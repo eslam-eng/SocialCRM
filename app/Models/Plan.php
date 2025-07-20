@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enum\SubscriptionDurationEnum;
+
 class Plan extends BaseModel
 {
     protected $fillable = [
@@ -13,21 +15,14 @@ class Plan extends BaseModel
         'trial_days',
         'sort_order',
         'currency_id',
+        'refund_days',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
         'is_active' => 'boolean',
-        'is_default' => 'boolean',
+        'billing_cycle' => SubscriptionDurationEnum::class,
     ];
-
-    /**
-     * Get the currency that owns the plan.
-     */
-    public function currency()
-    {
-        return $this->belongsTo(Currency::class);
-    }
 
     public function features()
     {

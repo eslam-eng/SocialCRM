@@ -71,4 +71,9 @@ class User extends Authenticatable
     {
         return $this->createToken($name, $abilities)->plainTextToken;
     }
+
+    public function socialAccounts()
+    {
+        return $this->hasMany(SocialAccount::class);
+    }
 }
