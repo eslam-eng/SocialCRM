@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('device_token')->nullable();
             $table->boolean('is_active')->default(\App\Enum\ActivationStatusEnum::ACTIVE->value);
             $table->string('locale')->default('en');
+            $table->string('timezone')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

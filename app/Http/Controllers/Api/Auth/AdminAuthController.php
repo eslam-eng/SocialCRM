@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Auth;
 use App\DTOs\AuthCredentialsDTO;
 use App\Helpers\ApiResponse;
 use App\Http\Requests\AuthFormRequest;
+use App\Http\Resources\Api\SuperAdmin\AuthUserResource;
 use App\Services\Actions\Auth\AdminAuthService;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
@@ -16,8 +17,9 @@ class AdminAuthController
             $credentials = AuthCredentialsDTO::fromRequest($request);
             $admin = $authService->authenticate($credentials);
             $token = $admin->generateToken();
+
             $data = [
-                'user' => $admin,
+                'user' => AuthUserResource::make($admin),
                 'token' => $token,
             ];
 

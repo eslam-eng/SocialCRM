@@ -10,12 +10,13 @@ Route::fallback(function () {
     return ApiResponse::notFound(message: 'Endpoint not found');
 })->middleware('throttle:throttle_fallback'); // 10 requests per minute
 
-Route::middleware('auth:admin')->group(function () {
+Route::post('auth/login', AdminAuthController::class);
 
-    Route::post('login', AdminAuthController::class);
+Route::middleware('auth:admin-api')
+    ->group(function () {
 
-    Route::apiResource('features', FeatureController::class);
+        Route::apiResource('features', FeatureController::class);
 
-    Route::apiResource('plans', PlanController::class);
 
-});
+    });
+Route::apiResource('plans', PlanController::class);

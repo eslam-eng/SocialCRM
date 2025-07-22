@@ -14,7 +14,9 @@ return new class extends Migration
         Schema::create('feature_plan_subscription', function (Blueprint $table) {
             $table->id();
             $table->foreignId('subscription_id')->constrained('plan_subscriptions')->onDelete('cascade');
-            $table->foreignId('feature_id')->constrained()->onDelete('cascade');
+            $table->string('slug');
+            $table->json('name'); // as it will be translatable
+            $table->enum('group', ['limit', 'feature']);
             $table->string('value');
             $table->timestamps();
         });

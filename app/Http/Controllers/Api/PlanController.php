@@ -6,7 +6,7 @@ use App\DTOs\PlanDTO;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PlanRequest;
-use App\Http\Resources\Api\PlanResource;
+use App\Http\Resources\Api\SuperAdmin\PlanResource;
 use App\Services\Plan\PlanService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

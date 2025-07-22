@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Api;
+namespace App\Http\Resources\Api\SuperAdmin;
 
 use App\Enum\ActivationStatusEnum;
 use Illuminate\Http\Request;

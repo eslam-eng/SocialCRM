@@ -12,7 +12,7 @@ class FeatureDTO extends BaseDTO
     public function __construct(
         public array $name,
         public string $group,
-        public ?string $description = null,
+        public ?array $description = null,
         public ?bool $is_active = ActivationStatusEnum::ACTIVE->value,
     ) {}
 
