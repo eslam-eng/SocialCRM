@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\PlanSubscription;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,7 +13,8 @@ return new class extends Migration {
     {
         Schema::create('feature_plan_subscription', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('subscription_id')->constrained('plan_subscriptions')->onDelete('cascade');
+            $table->foreignIdFor(PlanSubscription::class)->constrained()->cascadeOnDelete();
+            $table->integer('feature_id');
             $table->string('slug');
             $table->json('name'); // as it will be translatable
             $table->enum('group', ['limit', 'feature']);

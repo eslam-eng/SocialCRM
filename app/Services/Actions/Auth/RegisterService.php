@@ -5,7 +5,6 @@ namespace App\Services\Actions\Auth;
 use App\DTOs\SubscriptionPlanDTO;
 use App\DTOs\TenantDTO;
 use App\DTOs\UserDTO;
-use App\Models\FeaturePlanSubscription;
 use App\Models\Plan;
 use App\Models\PlanSubscription;
 use App\Models\Tenant;
@@ -108,9 +107,10 @@ readonly class RegisterService
         $featuresToAttach = [];
         foreach ($plan->features as $feature) {
             $featuresToAttach[] = [
-                'subscription_id' => $subscription->id,
+                'plan_subscription_id' => $subscription->id,
+                'feature_id' => $feature->id,
                 'slug' => $feature->slug,
-                'name' => $feature->name,
+                'name' => json_encode($feature->getTranslations('name')),
                 'value' => $feature->pivot->value, // value from feature_plan pivot
                 'usage' => 0,
             ];
