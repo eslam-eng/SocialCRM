@@ -9,6 +9,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\Api\AuthUserResource;
 use App\Services\Actions\Auth\RegisterService;
 use App\Services\Actions\Auth\VerificationCodeService;
+use Symfony\Component\Mailer\Exception\TransportException;
 
 class RegisterController extends Controller
 {
@@ -17,6 +18,7 @@ class RegisterController extends Controller
      */
     public function __invoke(RegisterRequest $request, RegisterService $registerService, VerificationCodeService $verificationCodeService)
     {
+        $user = null;
         try {
             $userDTO = UserDTO::fromRequest($request);
 
@@ -34,8 +36,14 @@ class RegisterController extends Controller
             ];
 
             return ApiResponse::success(data: $data);
+        } catch (TransportException $e) {
+            //todo remove this when mail should queue
+            $data = [
+                'token' => $user->generateToken(),
+                'user' => AuthUserResource::make($user),
+            ];
+            return ApiResponse::success(data: $data, message: 'Email not sent, please check your email address');
         } catch (\Exception $e) {
-            dd($e);
             return ApiResponse::error(message: 'there is an error please try again later or contact with support for fast response');
         }
     }
