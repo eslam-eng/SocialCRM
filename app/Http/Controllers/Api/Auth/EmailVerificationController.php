@@ -7,7 +7,6 @@ use App\Exceptions\VerificationCode\CodeNotFoundException;
 use App\Exceptions\VerificationCode\MaxAttemptsExceededException;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SendVerificationCodeRequest;
 use App\Http\Requests\VerifyEmailRequest;
 use App\Services\Actions\Auth\VerificationCodeService;
 use App\Services\User\UserService;
@@ -50,27 +49,5 @@ class EmailVerificationController extends Controller
             return ApiResponse::error(message: $exception->getMessage(), code: $exception->getCode());
         }
 
-    }
-
-    public function resend(SendVerificationCodeRequest $request)
-    {
-        $user = $this->userService->findByKey('email', $request->email);
-
-        if (! $user) {
-            return ApiResponse::error(
-                message: 'User not found',
-                code: 404
-            );
-        }
-
-        $this->verificationService->sendVerificationCode(
-            email: $user->email,
-            type: 'email_verification',
-            userName: $user->name
-        );
-
-        return ApiResponse::success(
-            message: 'Verification code sent successfully'
-        );
     }
 }

@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enum\VerificationCodeType;
+use Illuminate\Validation\Rule;
+
 class SendVerificationCodeRequest extends BaseFormRequest
 {
     /**
@@ -20,7 +23,8 @@ class SendVerificationCodeRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|exists:users,email',
+            'email' => 'required|email',
+            'type' => ['required', Rule::in(VerificationCodeType::values())],
         ];
     }
 }

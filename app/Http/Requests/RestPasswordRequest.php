@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Password;
 
 class RestPasswordRequest extends FormRequest
 {
@@ -24,7 +25,7 @@ class RestPasswordRequest extends FormRequest
         return [
             'email' => 'required|email|exists:users,email',
             'code' => 'required|string',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => ['required', 'string', 'confirmed', Password::min(8)->mixedCase()],
         ];
     }
 }

@@ -38,7 +38,7 @@ class UpdateFeatureRequest extends BaseFormRequest
     {
         $this->merge([
             'is_active' => $this->boolean('is_active'),
-            'slug' => Str::slug(Arr::get($this->name, 'en'))
+            'slug' => Str::slug(Arr::get($this->name, 'en')),
         ]);
     }
 }

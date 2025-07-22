@@ -14,9 +14,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class FeatureController extends Controller
 {
-    public function __construct(private readonly FeatureService $featureService)
-    {
-    }
+    public function __construct(private readonly FeatureService $featureService) {}
 
     public function index(Request $request)
     {
@@ -52,6 +50,7 @@ class FeatureController extends Controller
     {
         try {
             $this->featureService->delete($id);
+
             return ApiResponse::success(message: 'Feature deleted successfully');
         } catch (NotFoundHttpException $e) {
             return ApiResponse::notFound(message: 'Feature not found');

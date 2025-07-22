@@ -3,44 +3,77 @@
 namespace App\Services\Actions\Auth;
 
 use App\DTOs\RestPasswordDTO;
+use App\Enum\VerificationCodeType;
 use App\Models\User;
 use App\Services\BaseService;
+use App\Services\User\UserService;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Validation\ValidationException;
 
 class ForgetPasswordService extends BaseService
 {
-    public function sendResetCode(string $email)
+    public function __construct(private readonly UserService $userService, private readonly VerificationCodeService $verificationCodeService) {}
+
+    public function reset(ResetPasswordRequest $request)
     {
-        $code = rand(100000, 999999);
+        try {
+            DB::beginTransaction();
 
-        Cache::put('reset_code_'.$email, $code, now()->addMinutes(15));
+            $user = $this->userService->findByKey('email', $request->email);
+            if (! $user) {
+                return ApiResponse::error(
+                    message: 'User not found',
+                    code: 404
+                );
+            }
 
-        Mail::raw("Your reset code is: $code", fn ($message) => $message->to($email)->subject('Password Reset Code'));
+            // Verify the code
+            $this->verificationService->verifyCode(
+                $user->email,
+                'reset_password',
+                $request->code
+            );
 
-        return true;
+            // Update password
+            $user->password = Hash::make($request->password);
+            $user->save();
+
+            DB::commit();
+
+            return ApiResponse::success(
+                message: 'Password has been reset successfully'
+            );
+
+        } catch (CodeNotFoundException|CodeExpiredException|MaxAttemptsExceededException $exception) {
+            DB::rollBack();
+
+            return ApiResponse::error(
+                message: $exception->getMessage(),
+                code: $exception->getCode()
+            );
+        }
     }
 
+    /**
+     * @throws \Throwable
+     */
     public function restPassword(RestPasswordDTO $dto)
     {
-        $cachedCode = Cache::get('reset_code_'.$dto->email);
+        return DB::transaction(function () use ($dto) {
+            $user = $this->userService->findByKey('email', $dto->email);
+            // Verify the code
+            $this->verificationCodeService->verifyCode(
+                email: $user->email,
+                type: VerificationCodeType::RESET_PASSWORD->value,
+                code: $dto->code
+            );
+            // Update password
+            $user->password = Hash::make($dto->password);
 
-        if ($cachedCode != $dto->code) {
-            throw ValidationException::withMessages([
-                'code' => ['The provided code is invalid.'],
-            ]);
-        }
+            return $user->save();
+        });
 
-        $user = $this->getQuery()->firstWhere('email', $dto->email);
-
-        $user->password = Hash::make($dto->password);
-
-        $user->save();
-
-        Cache::forget('reset_code_'.$dto->email);
     }
 
     protected function getFilterClass(): ?string

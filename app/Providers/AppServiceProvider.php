@@ -58,11 +58,20 @@ class AppServiceProvider extends ServiceProvider
         });
 
         RateLimiter::for('verification_code', function (Request $request) {
-            return Limit::perMinute(1)->by($request->input('email'))
+            $email = (string) $request->input('email');
+            $ip = $request->ip();
+
+            // Combine both as unique keys
+            $key = $email ?: $ip;
+
+            return Limit::perMinute(1)->by($key)
                 ->response(function (Request $request, array $headers) {
                     $retryAfter = $headers['Retry-After'] ?? 60;
 
-                    return ApiResponse::error(message: "Too many password reset attempts for this email. Try again in {$retryAfter} seconds.", code: 429);
+                    return ApiResponse::error(
+                        message: "Too many password reset attempts. Try again in {$retryAfter} seconds.",
+                        code: 429
+                    );
                 });
         });
     }

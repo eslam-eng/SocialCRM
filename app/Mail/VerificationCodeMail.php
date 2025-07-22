@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Enum\VerificationCodeType;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -26,7 +27,7 @@ class VerificationCodeMail extends Mailable
      */
     public function envelope(): Envelope
     {
-        $subject = $this->type === 'reset_password'
+        $subject = $this->type == VerificationCodeType::RESET_PASSWORD->value
             ? 'Reset Password Verification Code'
             : 'Email Verification Code';
 
@@ -41,7 +42,7 @@ class VerificationCodeMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.Verification-code-email',
+            view: 'emails.verification-code-email',
         );
     }
 

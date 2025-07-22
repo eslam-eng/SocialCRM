@@ -55,7 +55,12 @@ abstract class BaseService
      */
     public function findByKey(string $key, string $value, array $withRelation = []): ?Model
     {
-        return $this->baseQuery()->with($withRelation)->where($key, $value)->first();
+        $model = $this->baseQuery()->with($withRelation)->where($key, $value)->first();
+        if (! $model) {
+            throw new NotFoundHttpException('resource not found');
+        }
+
+        return $model;
     }
 
     // Add more shared methods as needed...

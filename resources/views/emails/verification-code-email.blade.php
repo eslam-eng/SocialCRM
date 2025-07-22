@@ -50,7 +50,7 @@
     <div class="container">
         <div class="header">
             <h1>
-                @if($type === 'reset_password')
+                @if($type == \App\Enum\VerificationCodeType::RESET_PASSWORD->value)
                     Password Reset Code
                 @else
                     Email Verification
@@ -60,7 +60,7 @@
 
         <p>Hello {{ $userName ?? 'there' }},</p>
 
-        @if($type === 'reset_password')
+        @if($type == \App\Enum\VerificationCodeType::RESET_PASSWORD->value)
             <p>You have requested to reset your password. Use the verification code below to proceed with your password reset:</p>
         @else
             <p>Thank you for registering with CRM. To verify your email address, please use the following verification code:</p>
