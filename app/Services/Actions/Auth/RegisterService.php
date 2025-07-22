@@ -16,6 +16,7 @@ use App\Services\User\UserService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Stevebauman\Location\Facades\Location as GioLocation;
+
 readonly class RegisterService
 {
     /**
@@ -43,7 +44,7 @@ readonly class RegisterService
         $tenant = $this->createTenantFromDTO($registerDTO);
         $user = $this->createAndLinkUser($registerDTO, $tenant);
         $this->setupFreeTrial($tenant);
-        $this->setUserLocation(user:$user);
+        $this->setUserLocation(user: $user);
         return $user;
     }
 
@@ -60,8 +61,8 @@ readonly class RegisterService
     private function setUserLocation(User $user): void
     {
         $position = GioLocation::get(request()->ip());
-        if ($position){
-            $user->update(['country'=>$position->countryName]);
+        if ($position) {
+            $user->update(['country' => $position->countryName]);
         }
     }
 
