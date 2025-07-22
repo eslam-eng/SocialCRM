@@ -18,7 +18,7 @@ class Tenant extends BaseModel
 
     public function users()
     {
-        return $this->belongsToMany(User::class)
+        return $this->belongsToMany(User::class,'tenant_users')
             ->withTimestamps();
     }
 

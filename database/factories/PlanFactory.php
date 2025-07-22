@@ -1,0 +1,39 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Enum\ActivationStatusEnum;
+use App\Enum\SubscriptionDurationEnum;
+use App\Models\Plan;
+use App\Models\Tenant;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
+class PlanFactory extends Factory
+{
+    protected $model = Plan::class;
+
+
+
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        return [
+            'name' => fake()->slug(),
+            'description' => fake()->sentence(10),
+            'price' => fake()->numberBetween(30, 50),
+            'billing_cycle' => fake()->randomElement(SubscriptionDurationEnum::values()),
+            'is_active' => true,
+            'trial_days' => 14,  // Common trial period of 14 days
+            'sort_order' => fake()->numberBetween(1, 100),
+            'currency' => 'USD',  // Default currency
+            'refund_days' => fake()->numberBetween(0, 30),  // Common refund period up to 30 days
+        ];
+    }
+}

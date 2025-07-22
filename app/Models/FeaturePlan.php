@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PlanFeature extends BaseModel
+class FeaturePlan extends BaseModel
 {
+    protected $table = 'feature_plan';
+
     protected $fillable = [
         'plan_id',
         'feature_id',

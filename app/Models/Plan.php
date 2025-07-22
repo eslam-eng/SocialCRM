@@ -19,7 +19,7 @@ class Plan extends BaseModel
         'is_active',
         'trial_days',
         'sort_order',
-        'currency_id',
+        'currency',
         'refund_days',
     ];
 

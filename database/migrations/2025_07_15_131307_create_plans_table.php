@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description')->nullable();
+            $table->string('description',255)->nullable();
             $table->string('currency');
             $table->decimal('price');
             $table->boolean('is_active')->default(true);
-            $table->tinyInteger('billing_cycle')->comment('monthly,annual,..');
+            $table->string('billing_cycle')->comment('numbers refers to this types,monthly,annual,..');
             $table->integer('sort_order')->default(0);
             $table->integer('trial_days')->default(0);
             $table->integer('refund_days')->default(0);

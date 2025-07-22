@@ -27,7 +27,7 @@ class RegisterController extends Controller
                 type: 'email_verification',
                 userName: $user->name
             );
-
+            $user->fresh();
             $data = [
                 'token' => $user->generateToken(),
                 'user' => AuthUserResource::make($user),
