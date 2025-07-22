@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class FeaturePlan extends BaseModel
+class FeaturePlan extends Pivot
 {
+    use HasFactory;
+
     protected $table = 'feature_plan';
 
     protected $fillable = [

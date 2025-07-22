@@ -10,8 +10,13 @@ enum ActivationStatusEnum: int
     public function getLabel(): string
     {
         return match ($this) {
-            self::ACTIVE => __('lang.active'),
-            self::INACTIVE => __('lang.inactive'),
+            self::ACTIVE => __('app.active'),
+            self::INACTIVE => __('app.inactive'),
         };
+    }
+
+    public static function values(): array
+    {
+        return array_column(self::cases(), 'value');
     }
 }

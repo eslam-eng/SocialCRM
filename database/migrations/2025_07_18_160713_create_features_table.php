@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,14 +12,23 @@ return new class extends Migration
     {
         Schema::create('features', function (Blueprint $table) {
             $table->id();
-            $table->string('slug')->unique();
+            $table->string('slug');
             $table->json('name'); // as it will be translatable
-            $table->enum('group', ['limit', 'feature']); // limit = numeric quota, feature = boolean
+            $table->tinyInteger('group')->comment('is features for limits or for modules values from enum Feature Group'); // limit = numeric quota, feature = boolean
             $table->text('description')->nullable();
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });
+
+        // After table creation, run raw SQL
+        DB::statement("
+                            ALTER TABLE features
+                            ADD COLUMN slug_unique VARCHAR(255)
+                            GENERATED ALWAYS AS (IF(deleted_at IS NULL, slug, NULL)) STORED
+                        ");
+
+        DB::statement("CREATE UNIQUE INDEX unique_slug_not_deleted ON features (slug_unique)");
     }
 
     /**

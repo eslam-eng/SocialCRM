@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use App\Enum\ActivationStatusEnum;
 use App\Enum\FeatureGroupEnum;
 use App\Enum\SubscriptionDurationEnum;
+use App\Traits\HasTranslatedFallback;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Translatable\HasTranslations;
 
 class Plan extends BaseModel
 {
-    use SoftDeletes;
+    use SoftDeletes, HasTranslatedFallback, HasTranslations;
 
     protected $fillable = [
         'name',
@@ -23,29 +26,31 @@ class Plan extends BaseModel
         'refund_days',
     ];
 
+    public $translatable = ['name', 'description'];
     protected $casts = [
         'price' => 'decimal:2',
-        'is_active' => 'boolean',
+        'is_active' => ActivationStatusEnum::class,
         'billing_cycle' => SubscriptionDurationEnum::class,
     ];
 
+
     public function features()
     {
-        return $this->belongsToMany(Feature::class)->withPivot('value')->withTimestamps();
+        return $this->belongsToMany(Feature::class, 'feature_plan')
+            ->withPivot('value')
+            ->using(FeaturePlan::class);
     }
 
     public function limitFeatures(): BelongsToMany
     {
-        return $this->belongsToMany(Feature::class)
-            ->where('type', FeatureGroupEnum::LIMIT->value)
-            ->withPivot('value');
+        return $this->features()
+            ->where('group', FeatureGroupEnum::LIMIT->value);
     }
 
     public function addonFeatures(): BelongsToMany
     {
-        return $this->belongsToMany(Feature::class)
-            ->where('type', FeatureGroupEnum::FEATURE->value)
-            ->withPivot('value');
+        return $this->features()
+            ->where('group', FeatureGroupEnum::FEATURE->value);
     }
 
     /**
@@ -61,8 +66,4 @@ class Plan extends BaseModel
         return $query->where('trial_days', '>', 0);
     }
 
-    public function planFeatures()
-    {
-        return $this->hasMany(PlanFeature::class);
-    }
 }

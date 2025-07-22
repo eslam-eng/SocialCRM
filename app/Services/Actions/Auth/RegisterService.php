@@ -104,17 +104,17 @@ readonly class RegisterService
             return;
         }
 
+        // Snapshot features to feature_plan_subscription
         $featuresToAttach = [];
-
         foreach ($plan->features as $feature) {
             $featuresToAttach[] = [
                 'subscription_id' => $subscription->id,
-                'slug' => $feature->key,
+                'slug' => $feature->slug,
                 'name' => $feature->name,
                 'value' => $feature->pivot->value, // value from feature_plan pivot
+                'usage' => 0,
             ];
         }
-
-        FeaturePlanSubscription::query()->insert($featuresToAttach);
+        $subscription->features()->sync($featuresToAttach);
     }
 }

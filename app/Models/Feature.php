@@ -2,28 +2,30 @@
 
 namespace App\Models;
 
+use App\Traits\HasTranslatedFallback;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Spatie\Translatable\HasTranslations;
 
 class Feature extends BaseModel
 {
-    use HasTranslations,SoftDeletes;
+    use HasTranslations,SoftDeletes,HasTranslatedFallback;
 
     protected $fillable = ['slug', 'name', 'description', 'group', 'is_active'];
 
     public $translatable = ['name', 'description'];
+
     public function plans()
     {
-        return $this->belongsToMany(Plan::class)
+        return $this->belongsToMany(Plan::class, 'feature_plan')
             ->withPivot('value')
             ->using(FeaturePlan::class);
     }
 
-    public function subscriptions()
+    public function planSubscriptions()
     {
-        return $this->belongsToMany(PlanSubscription::class)
-            ->withPivot('value')
+        return $this->belongsToMany(PlanSubscription::class, 'feature_plan_subscription')
+            ->withPivot('value', 'usage')
             ->using(FeaturePlanSubscription::class);
     }
 
@@ -32,26 +34,6 @@ class Feature extends BaseModel
         static::creating(function ($feature) {
             $feature->slug = Str::slug($feature->getTranslation('name', 'en'));
         });
-    }
-
-    public function getTranslatedFallback(string $attribute, ?string $locale = null): ?string
-    {
-        $locale = $locale ?? app()->getLocale();
-        $fallbackLocales = config('app.fallback_locales', ['en']);
-
-        $value = $this->getTranslation($attribute, $locale, false);
-
-        // If value is missing in current locale, loop over fallbacks
-        if (!$value) {
-            foreach ($fallbackLocales as $fallbackLocale) {
-                $value = $this->getTranslation($attribute, $fallbackLocale, false);
-                if ($value) {
-                    break;
-                }
-            }
-        }
-
-        return $value;
     }
 
     // public function subscriptions(): BelongsToMany

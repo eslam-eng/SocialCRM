@@ -16,4 +16,11 @@ return [
     'cannot_suspend_expired' => 'لا يمكن تعليق اشتراك منتهي.',
     'cannot_mark_past_due_expired' => 'لا يمكن وضع اشتراك منتهي كمتأخر.',
     'cannot_mark_past_due_suspended' => 'لا يمكن وضع اشتراك معلق كمتأخر.',
+
+    //feature----------------------------------
+    'limit' => 'القيود',
+    'feature' => 'الميزات',
+
+    'active' => 'نشط',
+    'inactive' => 'غير نشط',
 ];

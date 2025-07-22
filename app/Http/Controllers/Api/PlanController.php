@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\DTOs\PlanDTO;
+use App\Enum\SubscriptionDurationEnum;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PlanRequest;
@@ -13,16 +14,25 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PlanController extends Controller
 {
-    public function __construct(protected PlanService $planService) {}
+    public function __construct(protected PlanService $planService)
+    {
+    }
 
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $filters = $request->get('filters');
+        $filters = [
+            'limits_only' => $request->query('limits_only'),
+            'addons_only' => $request->query('addons_only'),
+            'billing_cycle' => $request->query('billing_cycle', SubscriptionDurationEnum::MONTHLY->value),
+            'is_active' => $request->query('is_active', true),
+        ];
+
         $withRelations = ['limitFeatures', 'addonFeatures'];
-        $plans = $this->planService->paginate(filters: $filters, withRelation: $withRelations);
+
+        $plans = $this->planService->paginate(filters: array_filter($filters), withRelation: $withRelations);
 
         return PlanResource::collection($plans);
 
