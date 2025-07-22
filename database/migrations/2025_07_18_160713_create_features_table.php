@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('features', function (Blueprint $table) {
             $table->id();
-            $table->string('key')->unique();
+            $table->string('slug')->unique();
             $table->json('name'); // as it will be translatable
             $table->enum('group', ['limit', 'feature']); // limit = numeric quota, feature = boolean
             $table->text('description')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -16,7 +16,6 @@ class FeatureResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'key' => $this->key,
             'name' => $this->name,
             'description' => $this->description,
             'group' => $this->group,

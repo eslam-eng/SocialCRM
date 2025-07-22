@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Spatie\Translatable\HasTranslations;
 
 class Feature extends BaseModel
 {
-    use HasTranslations;
+    use HasTranslations,SoftDeletes;
 
     protected $fillable = ['key', 'name', 'description', 'group', 'is_active'];
 
@@ -28,7 +29,7 @@ class Feature extends BaseModel
     public static function booted()
     {
         static::creating(function ($feature) {
-            $feature->key = Str::slug($feature->name);
+            $feature->slug = Str::slug($feature->getTranslation('name', 'en'));
         });
     }
 

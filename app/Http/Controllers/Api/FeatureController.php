@@ -2,19 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\DTOs\SegmentDTO;
+use App\DTOs\FeatureDTO;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SegmentRequest;
+use App\Http\Requests\Feature\StoreFeatureRequest;
+use App\Http\Requests\Feature\UpdateFeatureRequest;
 use App\Http\Resources\Api\FeatureResource;
-use App\Http\Resources\Api\SegmentResource;
 use App\Services\FeatureService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class FeatureController extends Controller
 {
-    public function __construct(private FeatureService $featureService) {}
+    public function __construct(private readonly FeatureService $featureService)
+    {
+    }
 
     public function index(Request $request)
     {
@@ -23,24 +25,25 @@ class FeatureController extends Controller
         return FeatureResource::collection($features);
     }
 
-    public function store(SegmentRequest $request)
+    public function store(StoreFeatureRequest $request)
     {
-        $dto = SegmentDTO::fromRequest($request);
+        $dto = FeatureDTO::fromRequest($request);
 
-        $segment = $this->segmentService->create($dto);
+        $feature = $this->featureService->create(dto: $dto);
 
-        return SegmentResource::make($segment);
+        return FeatureResource::make($feature);
     }
 
-    public function update(SegmentRequest $request, $id)
+    public function update(UpdateFeatureRequest $request, $id)
     {
         try {
-            $dto = SegmentDTO::fromRequest($request);
-            $segment = $this->segmentService->update($id, $dto);
+            $dto = FeatureDTO::fromRequest($request);
 
-            return ApiResponse::success(message: 'currency updated successfully');
+            $feature = $this->featureService->update(id: $id, dto: $dto);
+
+            return ApiResponse::success(message: 'Feature updated successfully');
         } catch (NotFoundHttpException $e) {
-            return ApiResponse::notFound(message: 'Currency not found');
+            return ApiResponse::notFound(message: 'Feature not found');
         }
 
     }
@@ -48,11 +51,10 @@ class FeatureController extends Controller
     public function destroy($id)
     {
         try {
-            $this->segmentService->delete($id);
-
-            return ApiResponse::success(message: 'Segment deleted successfully');
+            $this->featureService->delete($id);
+            return ApiResponse::success(message: 'Feature deleted successfully');
         } catch (NotFoundHttpException $e) {
-            return ApiResponse::notFound(message: 'Segment not found');
+            return ApiResponse::notFound(message: 'Feature not found');
         }
 
     }
