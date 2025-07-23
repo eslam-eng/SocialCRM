@@ -9,9 +9,13 @@ use App\Http\Controllers\Api\Auth\SendVerificationCodeController;
 use App\Http\Controllers\Api\SegmentController;
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => ['guest', 'throttle:login'], 'prefix' => 'auth'], function () {
-    Route::post('login', AuthController::class);
-    Route::post('register', RegisterController::class);
+Route::group(['middleware' => ['guest'], 'prefix' => 'auth'], function () {
+
+    Route::middleware('throttle:login')->group(function (){
+        Route::post('login', AuthController::class);
+        Route::post('register', RegisterController::class);
+    });
+
     Route::get('google', [GoogleAuthController::class, 'redirectToProvider']);
     Route::get('google/callback', [GoogleAuthController::class, 'authenticate']);
 });
