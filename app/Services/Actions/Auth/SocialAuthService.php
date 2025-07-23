@@ -45,19 +45,20 @@ readonly class SocialAuthService
         if (! $user) {
             $user = $this->registerService->handle($userDTO);
             $user->update(['email_verified_at' => now()]);
-            event(new UserRegistered($user));
+//            event(new UserRegistered($user));
         }
 
-        $user->socialAccounts()->create([
+        $user->socialAccounts()->updateOrCreate([
             'provider_name' => $provider_name,
             'provider_id' => $oauthUser->getId(),
+        ],[
             'access_token' => $oauthUser->token,
             'refresh_token' => $oauthUser->refreshToken ?? null,
             'expires_in' => $oauthUser->expiresIn,
             'avatar' => $oauthUser->getAvatar(),
         ]);
 
-        auth()->login($user);
+//        auth()->login($user);
 
         return $user;
     }
