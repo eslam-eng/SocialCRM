@@ -13,7 +13,10 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()->count(5)->create();
+        User::factory()->create([
+            'email'=>'eslam@gmail.com'
+        ]);
+        User::factory()->count(4)->create();
         User::all()->each(function ($user) {
             TenantUser::query()->create([
                 'tenant_id' => $user->tenant_id,

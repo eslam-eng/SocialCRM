@@ -2,7 +2,7 @@
 
 namespace App\DTOs;
 
-use App\DTOS\Abstract\BaseDTO;
+use App\DTOs\Abstract\BaseDTO;
 use App\Enum\ActivationStatusEnum;
 use App\Enum\CustomerSourceEnum;
 use App\Enum\CustomerStatusEnum;

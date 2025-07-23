@@ -10,8 +10,8 @@ enum CustomerSourceEnum: int
     public function getLabel(): string
     {
         return match ($this) {
-            self::MANUAL => __('app.active'),
-            self::WEBSITE => __('app.inactive'),
+            self::MANUAL => 'Manual',
+            self::WEBSITE => "website",
         };
     }
 

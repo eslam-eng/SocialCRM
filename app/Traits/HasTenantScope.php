@@ -13,18 +13,20 @@ trait HasTenantScope
         // Automatically add tenant_id when creating a new model
         static::creating(function (Model $model) {
             if (Auth::check() && ! $model->tenant_id) {
-                $model->tenant_id = Auth::user()->current_tenant_id;
+                $model->tenant_id = Auth::user()->tenant_id;
             }
         });
 
         // Add global scope to filter by tenant_id
         static::addGlobalScope('tenant', function (Builder $builder) {
             // Allow admins (from admin guard) to bypass tenant scoping
-            if (Auth::guard('admin')->check()) {
+            if (Auth::guard('admin-api')->check()) {
                 return;
             }
-            if (Auth::check()) {
-                $builder->where('tenant_id', Auth::user()->current_tenant_id);
+            $defaultGuard = config('auth.defaults.guard');
+
+            if (Auth::guard($defaultGuard)->check()) {
+                return Auth::guard($defaultGuard)->user()?->tenant_id;
             }
         });
     }

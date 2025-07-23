@@ -21,7 +21,7 @@ class CustomerService extends BaseService
         return Customer::query();
     }
 
-    public function create(CustomerDTO $customerDTO): Tag
+    public function create(CustomerDTO $customerDTO): Customer
     {
         return $this->getQuery()->create($customerDTO->toArray());
     }

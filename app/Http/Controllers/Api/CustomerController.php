@@ -9,6 +9,7 @@ use App\Http\Requests\CustomerRequest;
 use App\Http\Resources\Api\CustomerResource;
 use App\Services\CustomerService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CustomerController extends Controller
@@ -34,7 +35,7 @@ class CustomerController extends Controller
         $customerDTO = CustomerDTO::fromRequest($request);
         $customer = $this->customerService->create($customerDTO);
 
-        return CustomerResource::make($customer);
+        return ApiResponse::success(data: CustomerResource::make($customer),message: __('app.customer_created_successfully'));
 
     }
 

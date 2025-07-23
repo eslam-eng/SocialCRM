@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Auth\GoogleAuthController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\SendVerificationCodeController;
+use App\Http\Controllers\Api\CountryCodeController;
+use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,7 +35,8 @@ Route::group(['middleware' => ['auth:sanctum', 'locale']], function () {
 
     Route::group(['middleware' => 'verified'], function () {
         Route::get('profile', [UserController::class, 'profile']);
-        //        Route::apiResource()
+        Route::get('country-code', CountryCodeController::class);
+        Route::apiResource('customers', CustomerController::class);
         //        Route::resource('segments', SegmentController::class);
     });
 

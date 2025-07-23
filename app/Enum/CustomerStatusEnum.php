@@ -14,4 +14,15 @@ enum CustomerStatusEnum: int
     {
         return array_column(self::cases(), 'value');
     }
+
+    public function getLabel(): string
+    {
+        return match ($this) {
+            self::INACTIVE => 'INACTIVE',
+            self::ACTIVE => "ACTIVE",
+            self::LEAD => "LEAD",
+            self::CUSTOMER => "CUSTOMER",
+            self::PROSPECT => "PROSPECT",
+        };
+    }
 }

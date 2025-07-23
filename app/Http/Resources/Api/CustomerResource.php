@@ -20,8 +20,8 @@ class CustomerResource extends JsonResource
             'email' => $this->email,
             'phone' => $this->country_code."( $this->phone ) ",
             'address' => $this->address,
-            'status' => $this->description,
-            'source' => $this->description,
+            'status' => $this->status->getLabel(),
+            'source' => $this->source->getLabel(),
         ];
     }
 }
