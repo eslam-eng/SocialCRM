@@ -21,25 +21,21 @@ class EmailVerificationController extends Controller
     public function verify(VerifyEmailRequest $request)
     {
         try {
-            $user = $this->userService->findByKey('email', $request->email);
+            $user = $this->userService->getQuery()->withoutGlobalScope('tenant')->firstWhere('email', $request->email);
             if (! $user) {
                 return ApiResponse::error(
-                    message: 'User not found',
+                    message: 'email not found',
                     code: 404
                 );
             }
 
-            if ($user->email_verified_at) {
-                return ApiResponse::error(
-                    message: 'Email already verified',
-                    code: 400
-                );
+            if (!$user->email_verified_at) {
+                $this->verificationService->verifyCode($user->email, 'email_verification', $request->code);
+
+                $user->email_verified_at = now();
+
+                $user->save();
             }
-            $this->verificationService->verifyCode($user->email, 'email_verification', $request->code);
-
-            $user->email_verified_at = now();
-
-            $user->save();
 
             return ApiResponse::success(
                 message: 'Email verified successfully'
