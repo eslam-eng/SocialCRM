@@ -21,7 +21,8 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->alias([
+        $middleware->statefulApi()
+            ->alias([
             'verified' => EnsureEmailIsVerified::class,
             'locale' => SetLocale::class,
         ]);

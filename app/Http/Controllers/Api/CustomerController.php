@@ -9,12 +9,13 @@ use App\Http\Requests\CustomerRequest;
 use App\Http\Resources\Api\CustomerResource;
 use App\Services\CustomerService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CustomerController extends Controller
 {
-    public function __construct(protected readonly CustomerService $customerService) {}
+    public function __construct(protected readonly CustomerService $customerService)
+    {
+    }
 
     /**
      * Display a listing of the resource.
@@ -35,7 +36,7 @@ class CustomerController extends Controller
         $customerDTO = CustomerDTO::fromRequest($request);
         $customer = $this->customerService->create($customerDTO);
 
-        return ApiResponse::success(data: CustomerResource::make($customer),message: __('app.customer_created_successfully'));
+        return ApiResponse::success(data: CustomerResource::make($customer), message: __('app.customer_created_successfully'));
 
     }
 
@@ -52,10 +53,14 @@ class CustomerController extends Controller
      */
     public function update(CustomerRequest $request, string $id)
     {
-        $customerDTO = CustomerDTO::fromRequest($request);
-        $customer = $this->customerService->update(id: $id, customerDTO: $customerDTO);
+        try {
+            $customerDTO = CustomerDTO::fromRequest($request);
+            $customer = $this->customerService->update(id: $id, customerDTO: $customerDTO);
+            return ApiResponse::success(data: CustomerResource::make($customer), message: __('app.customer_updated_successfully'));
+        } catch (NotFoundHttpException $exception) {
+            return ApiResponse::notFound(message: $exception->getMessage());
+        }
 
-        return CustomerResource::make($customer);
     }
 
     /**

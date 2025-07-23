@@ -23,7 +23,7 @@ class UserService extends BaseService
      */
     protected function baseQuery(): Builder
     {
-        return User::query();
+        return User::query()->belongsToTenant();
     }
 
     public function create(UserDTO $userDTO)

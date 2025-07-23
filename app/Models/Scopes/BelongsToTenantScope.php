@@ -15,6 +15,7 @@ class BelongsToTenantScope implements Scope
      */
     public function apply(Builder $builder, Model $model): void
     {
+
         // Check if the authenticated user is using the teacher guard
         if (!Auth::guard('admin')->check() && $user =  Auth::user()) {
             if (Schema::hasColumn($model->getTable(), 'tenant_id')) {

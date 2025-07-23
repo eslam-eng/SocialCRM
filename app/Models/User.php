@@ -3,18 +3,23 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Scopes\BelongsToTenantScope;
+use App\Observers\UserObserver;
 use App\Traits\Filterable;
 use App\Traits\HasTenantScope;
 use Database\Factories\UserFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+#[ObservedBy([UserObserver::class])]
 class User extends Authenticatable
 {
-    use Filterable, HasApiTokens,HasTenantScope;
+    use Filterable, HasApiTokens;
 
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -25,7 +30,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $fillable = [
-        'name', 'email', 'password', 'phone','email_verified_at',
+        'name', 'email', 'password', 'phone', 'email_verified_at',
         'tenant_id', 'locale', 'country', 'device_token',
 
     ];
@@ -76,4 +81,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(SocialAccount::class);
     }
+
+    public function scopeBelongsToTenant(Builder $builder)
+    {
+        $builder->withGlobalScope('belongsToTenant', new BelongsToTenantScope());
+    }
+
+
 }
