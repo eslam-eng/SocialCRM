@@ -6,6 +6,7 @@ use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\AuthUserResource;
 use App\Services\User\UserService;
+use Laravel\Socialite\Facades\Socialite;
 
 class UserController extends Controller
 {

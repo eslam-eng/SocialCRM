@@ -19,7 +19,7 @@ Route::group(['middleware' => ['guest'], 'prefix' => 'auth'], function () {
     });
 
     Route::get('google', [GoogleAuthController::class, 'redirectToProvider']);
-    Route::get('google/callback', [GoogleAuthController::class, 'authenticate']);
+    Route::post('google/callback', [GoogleAuthController::class, 'authenticate']);
 });
 
 Route::prefix('auth')->middleware(['throttle:verification_code'])->group(function () {

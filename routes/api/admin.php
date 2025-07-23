@@ -12,10 +12,8 @@ Route::fallback(function () {
 
 Route::post('auth/login', AdminAuthController::class);
 
-Route::middleware('auth:admin-api')
-    ->group(function () {
+Route::group(['middleware' => ['auth:admin']], function () {
+    Route::apiResource('features', FeatureController::class);
+    Route::apiResource('plans', PlanController::class);
 
-        Route::apiResource('features', FeatureController::class);
-
-    });
-Route::apiResource('plans', PlanController::class);
+});

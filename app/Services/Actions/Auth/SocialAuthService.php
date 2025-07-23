@@ -20,14 +20,14 @@ readonly class SocialAuthService
      *
      * @throws UnauthorizedHttpException
      */
-    public function handle(string $provider_name): User
+    public function handle(string $provider_name,string $access_token): User
     {
         // check that provider name in available providers
         if (! in_array($provider_name, AvailableSocialProvidersEnum::values())) {
             throw new BadRequestHttpException('Provider not found');
         }
 
-        $oauthUser = Socialite::driver($provider_name)->stateless()->user();
+        $oauthUser = Socialite::driver($provider_name)->userFromToken($access_token);
         $socialAccount = SocialAccount::where('provider_name', $provider_name)
             ->where('provider_id', $oauthUser->getId())
             ->first();
