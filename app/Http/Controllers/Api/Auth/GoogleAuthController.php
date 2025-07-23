@@ -36,6 +36,8 @@ class GoogleAuthController extends Controller
 
             return ApiResponse::success(data: $data);
         } catch (\Exception $e) {
+            logger($e);
+            dd($e);
             return ApiResponse::error(message: 'there is an error please try again later or contact with support for fast response');
         }
     }
