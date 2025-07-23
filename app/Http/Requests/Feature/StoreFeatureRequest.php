@@ -7,7 +7,6 @@ use Illuminate\Validation\Rule;
 
 class StoreFeatureRequest extends BaseFeatureRequest
 {
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -35,7 +34,7 @@ class StoreFeatureRequest extends BaseFeatureRequest
         foreach ($supportedLocales as $locale) {
             $rules["name.{$locale}"] = 'required|string';
         }
+
         return $rules;
     }
-
 }

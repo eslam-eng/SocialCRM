@@ -6,12 +6,12 @@ use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Auth\GoogleAuthController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\SendVerificationCodeController;
-use App\Http\Controllers\Api\SegmentController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['guest'], 'prefix' => 'auth'], function () {
 
-    Route::middleware('throttle:login')->group(function (){
+    Route::middleware('throttle:login')->group(function () {
         Route::post('login', AuthController::class);
         Route::post('register', RegisterController::class);
     });
@@ -32,7 +32,9 @@ Route::group(['middleware' => ['auth:sanctum', 'locale']], function () {
     });
 
     Route::group(['middleware' => 'verified'], function () {
-        Route::resource('segments', SegmentController::class);
+        Route::get('profile', [UserController::class, 'profile']);
+        //        Route::apiResource()
+        //        Route::resource('segments', SegmentController::class);
     });
 
 });

@@ -14,9 +14,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PlanController extends Controller
 {
-    public function __construct(protected PlanService $planService)
-    {
-    }
+    public function __construct(protected PlanService $planService) {}
 
     /**
      * Display a listing of the resource.

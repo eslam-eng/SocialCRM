@@ -43,5 +43,4 @@ class FeaturePlanTableSeeder extends Seeder
             }
         }
     }
-
 }

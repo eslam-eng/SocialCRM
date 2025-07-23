@@ -4,10 +4,9 @@ namespace App\Http\Requests;
 
 use App\Enum\SubscriptionDurationEnum;
 use App\Rules\ValidCurrencyCode;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class PlanRequest extends FormRequest
+class PlanRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

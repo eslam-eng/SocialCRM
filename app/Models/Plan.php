@@ -12,7 +12,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Plan extends BaseModel
 {
-    use SoftDeletes, HasTranslatedFallback, HasTranslations;
+    use HasTranslatedFallback, HasTranslations, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -27,12 +27,12 @@ class Plan extends BaseModel
     ];
 
     public $translatable = ['name', 'description'];
+
     protected $casts = [
         'price' => 'decimal:2',
         'is_active' => ActivationStatusEnum::class,
         'billing_cycle' => SubscriptionDurationEnum::class,
     ];
-
 
     public function features()
     {
@@ -65,5 +65,4 @@ class Plan extends BaseModel
     {
         return $query->where('trial_days', '>', 0);
     }
-
 }

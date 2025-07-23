@@ -15,14 +15,14 @@ class FeatureFactory extends Factory
     {
         $name = [
             'en' => fake()->words(3, true),
-            'ar' => 'ميزة ' . fake()->words(2, true),
+            'ar' => 'ميزة '.fake()->words(2, true),
         ];
 
         return [
             'name' => $name,
             'description' => [
                 'en' => fake()->sentence(10),
-                'ar' => 'وصف ' . fake()->sentence(8),
+                'ar' => 'وصف '.fake()->sentence(8),
             ],
             'slug' => Str::slug($name['en']),
             'group' => fake()->randomElement(FeatureGroupEnum::values()),

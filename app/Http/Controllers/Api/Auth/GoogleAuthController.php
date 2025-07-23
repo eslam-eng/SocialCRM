@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Enum\AvailableSocialProvidersEnum;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Api\AuthUserResource;
 use App\Services\Actions\Auth\SocialAuthService;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
@@ -27,17 +26,15 @@ class GoogleAuthController extends Controller
 
             $user = $this->socialAuthService->handle(provider_name: AvailableSocialProvidersEnum::GOOGLE->value);
 
+            $redirectUrl = config('services.frontend_auth_redirect');
+
             $token = $user->generateToken();
 
-            $data = [
-                'token' => $token,
-                'user' => AuthUserResource::make($user),
-            ];
-
-            return ApiResponse::success(data: $data);
+            return redirect($redirectUrl)
+                ->withCookie(cookie('auth_token', $token, 60, null, null, true, true, false, 'Strict'));
         } catch (\Exception $e) {
             logger($e);
-            dd($e);
+
             return ApiResponse::error(message: 'there is an error please try again later or contact with support for fast response');
         }
     }

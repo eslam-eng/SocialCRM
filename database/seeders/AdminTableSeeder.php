@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Admin;
-use App\Models\Currency;
 use Illuminate\Database\Seeder;
 
 class AdminTableSeeder extends Seeder

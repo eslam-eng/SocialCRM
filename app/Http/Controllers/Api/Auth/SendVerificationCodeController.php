@@ -24,7 +24,7 @@ class SendVerificationCodeController extends Controller
             );
         }
 
-       $code =  $this->verificationService->sendVerificationCode(
+        $code = $this->verificationService->sendVerificationCode(
             email: $sendVerificationCodeRequest->email,
             type: $sendVerificationCodeRequest->type,
             userName: $user->name
@@ -32,6 +32,6 @@ class SendVerificationCodeController extends Controller
 
         $success_message = $sendVerificationCodeRequest->type == VerificationCodeType::RESET_PASSWORD->value ? 'Reset code sent to your email, check your inbox' : 'Verification code sent to your email, check your inbox';
 
-        return ApiResponse::success(data:['code'=>$code],message: $success_message);
+        return ApiResponse::success(data: ['code' => $code], message: $success_message);
     }
 }

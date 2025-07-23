@@ -17,7 +17,7 @@ return [
     'cannot_mark_past_due_expired' => 'Cannot mark an expired subscription as past due.',
     'cannot_mark_past_due_suspended' => 'Cannot mark a suspended subscription as past due.',
 
-    //feature----------------------------------
+    // feature----------------------------------
     'limit' => 'Limits',
     'feature' => 'Features',
     'active' => 'Active',

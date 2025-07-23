@@ -9,7 +9,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Feature extends BaseModel
 {
-    use HasTranslations,SoftDeletes,HasTranslatedFallback;
+    use HasTranslatedFallback,HasTranslations,SoftDeletes;
 
     protected $fillable = ['slug', 'name', 'description', 'group', 'is_active'];
 

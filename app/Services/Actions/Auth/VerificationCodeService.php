@@ -44,11 +44,11 @@ class VerificationCodeService extends BaseService
         ]);
 
         // Send email
-//        Mail::to($email)->queue(new VerificationCodeMail(
-//            code: $code,
-//            type: $type,
-//            userName: $userName
-//        ));
+        //        Mail::to($email)->queue(new VerificationCodeMail(
+        //            code: $code,
+        //            type: $type,
+        //            userName: $userName
+        //        ));
 
         return $code;
     }

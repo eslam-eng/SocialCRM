@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Admin;
 use App\Models\Feature;
 use Illuminate\Database\Seeder;
 
@@ -20,7 +19,7 @@ class FeatureTableSeeder extends Seeder
             ->active()
             ->create();
 
-// Create multiple features
+        // Create multiple features
         $features = Feature::factory()
             ->count(3)
             ->limit()

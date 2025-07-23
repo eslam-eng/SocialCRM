@@ -4,7 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -22,13 +23,13 @@ return new class extends Migration {
         });
 
         // After table creation, run raw SQL
-        DB::statement("
+        DB::statement('
                             ALTER TABLE features
                             ADD COLUMN slug_unique VARCHAR(255)
                             GENERATED ALWAYS AS (IF(deleted_at IS NULL, slug, NULL)) STORED
-                        ");
+                        ');
 
-        DB::statement("CREATE UNIQUE INDEX unique_slug_not_deleted ON features (slug_unique)");
+        DB::statement('CREATE UNIQUE INDEX unique_slug_not_deleted ON features (slug_unique)');
     }
 
     /**

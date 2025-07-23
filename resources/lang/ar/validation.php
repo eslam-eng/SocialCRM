@@ -15,7 +15,7 @@ return [
     'slug_string' => 'يجب أن يكون المعرف / الاسم نصًا.',
     'group_required' => 'المجموعة مطلوبة.',
     'group_invalid' => 'المجموعة المحددة غير صالحة.',
-    'auth_failed'=>'بيانات الاعتماد هذه غير مطابقة لسجلاتنا.',
+    'auth_failed' => 'بيانات الاعتماد هذه غير مطابقة لسجلاتنا.',
     // Locale-aware messages
     'name_locale_required' => 'الاسم باللغة :locale مطلوب.',
     'name_locale_string' => 'الاسم باللغة :locale يجب أن يكون نصًا.',

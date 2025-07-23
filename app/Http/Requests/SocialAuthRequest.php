@@ -3,10 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Enum\AvailableSocialProvidersEnum;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class SocialAuthRequest extends FormRequest
+class SocialAuthRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

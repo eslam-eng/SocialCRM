@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enum\CustomerSourceEnum;
+use App\Enum\CustomerStatusEnum;
 use App\Traits\HasCustomFields;
 use App\Traits\HasTenantScope;
 
@@ -11,11 +13,19 @@ class Customer extends BaseModel
 
     protected $fillable = [
         'name',
+        'country_code',
         'phone',
         'email',
-        'stage',
+        'source',
+        'address',
+        'status',
         'tenant_id',
     ];
 
-    protected $appends = ['custom_fields'];
+    protected $casts = [
+        'source' => CustomerSourceEnum::class,
+        'status' => CustomerStatusEnum::class,
+    ];
+
+    //    protected $appends = ['custom_fields'];
 }

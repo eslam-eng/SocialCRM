@@ -16,7 +16,6 @@ class BaseFeatureRequest extends BaseFormRequest
         return true;
     }
 
-
     protected function prepareForValidation(): void
     {
         $this->merge([
@@ -49,5 +48,4 @@ class BaseFeatureRequest extends BaseFormRequest
 
         return $messages;
     }
-
 }

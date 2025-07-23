@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
-class SegmentRequest extends BaseFormRequest
+use App\Enum\CustomerSourceEnum;
+use App\Enum\CustomerStatusEnum;
+
+class CustomerRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,13 +24,17 @@ class SegmentRequest extends BaseFormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'is_active' => 'required|boolean',
+            'country_code' => 'nullable|string',
+            'phone' => 'nullable|string',
+            'email' => 'nullable|email',
         ];
     }
 
     protected function prepareForValidation()
     {
-        $this->merge(['is_active' => $this->boolean('is_active')]);
+        $this->merge([
+            'status' => $this->get('status', CustomerStatusEnum::ACTIVE->value),
+            'source' => $this->get('source', CustomerSourceEnum::MANUAL->value),
+        ]);
     }
 }

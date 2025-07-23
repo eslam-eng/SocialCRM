@@ -2,9 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class CurrencyRequest extends FormRequest
+class CurrencyRequest extends BaseFormRequest
 {
     public function authorize(): bool
     {

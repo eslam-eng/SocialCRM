@@ -32,7 +32,7 @@ class RegisterController extends Controller
             $data = [
                 'token' => $user->generateToken(),
                 'user' => AuthUserResource::make($user),
-                'code' => $code
+                'code' => $code,
             ];
 
             return ApiResponse::success(data: $data);

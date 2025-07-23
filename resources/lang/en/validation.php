@@ -16,7 +16,7 @@ return [
     'group_required' => 'The group field is required.',
     'group_invalid' => 'The selected group is invalid.',
 
-    'auth_failed'=>'These credentials do not match our records.',
+    'auth_failed' => 'These credentials do not match our records.',
     // Locale-aware messages
     'name_locale_required' => 'The name in :locale is required.',
     'name_locale_string' => 'The name in :locale must be a string.',

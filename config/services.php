@@ -40,4 +40,6 @@ return [
         'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
 
+    'frontend_auth_redirect' => env('FRONTEND_AUTH_REDIRECT'),
+
 ];

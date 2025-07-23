@@ -17,6 +17,5 @@ Route::middleware('auth:admin-api')
 
         Route::apiResource('features', FeatureController::class);
 
-
     });
 Route::apiResource('plans', PlanController::class);

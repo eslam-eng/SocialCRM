@@ -5,17 +5,11 @@ namespace Database\Factories;
 use App\Enum\ActivationStatusEnum;
 use App\Enum\SubscriptionDurationEnum;
 use App\Models\Plan;
-use App\Models\Tenant;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 class PlanFactory extends Factory
 {
     protected $model = Plan::class;
-
-
 
     /**
      * Define the model's default state.
@@ -26,12 +20,12 @@ class PlanFactory extends Factory
     {
         return [
             'name' => [
-                'ar'=>fake()->slug(),
-                'en'=>fake()->slug()
+                'ar' => fake()->slug(),
+                'en' => fake()->slug(),
             ],
             'description' => [
-                'ar'=>fake()->sentence(10),
-                'en'=>fake()->sentence(10)
+                'ar' => fake()->sentence(10),
+                'en' => fake()->sentence(10),
             ],
             'price' => fake()->numberBetween(30, 50),
             'billing_cycle' => fake()->randomElement(SubscriptionDurationEnum::values()),

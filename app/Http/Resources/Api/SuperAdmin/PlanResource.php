@@ -2,8 +2,6 @@
 
 namespace App\Http\Resources\Api\SuperAdmin;
 
-use App\Enum\ActivationStatusEnum;
-use App\Enum\SubscriptionDurationEnum;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 

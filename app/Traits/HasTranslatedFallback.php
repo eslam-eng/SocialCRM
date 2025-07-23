@@ -2,8 +2,6 @@
 
 namespace App\Traits;
 
-use App\Abstracts\QueryFilter;
-
 trait HasTranslatedFallback
 {
     public function getTranslatedFallback(string $attribute, ?string $locale = null): ?string
@@ -14,7 +12,7 @@ trait HasTranslatedFallback
         $value = $this->getTranslation($attribute, $locale, false);
 
         // If value is missing in current locale, loop over fallbacks
-        if (!$value) {
+        if (! $value) {
             foreach ($fallbackLocales as $fallbackLocale) {
                 $value = $this->getTranslation($attribute, $fallbackLocale, false);
                 if ($value) {

@@ -23,20 +23,18 @@ readonly class RegisterService
      * Inject UsersService via constructor.
      */
     public function __construct(
-        protected UserService             $userService,
-        protected TenantService           $tenantService,
-        protected PlanService             $planService,
+        protected UserService $userService,
+        protected TenantService $tenantService,
+        protected PlanService $planService,
         protected PlanSubscriptionService $planSubscriptionService
-    )
-    {
-    }
+    ) {}
 
     /**
      * @throws \Throwable
      */
     public function handle(UserDTO $registerDTO): User
     {
-        return DB::transaction(fn() => $this->registerUserWithTenant($registerDTO));
+        return DB::transaction(fn () => $this->registerUserWithTenant($registerDTO));
     }
 
     private function registerUserWithTenant(UserDTO $registerDTO): User
@@ -45,6 +43,7 @@ readonly class RegisterService
         $user = $this->createAndLinkUser($registerDTO, $tenant);
         $this->setupFreeTrial($tenant);
         $this->setUserLocation(user: $user);
+
         return $user;
     }
 

@@ -7,7 +7,6 @@ use Illuminate\Validation\Rule;
 
 class UpdateFeatureRequest extends BaseFeatureRequest
 {
-
     public function rules(): array
     {
         $rules = [
@@ -34,5 +33,4 @@ class UpdateFeatureRequest extends BaseFeatureRequest
 
         return $rules;
     }
-
 }
