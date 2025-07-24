@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\ApiResponse;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Auth\EmailVerificationController;
 use App\Http\Controllers\Api\Auth\ForgotPasswordController;
@@ -10,6 +11,10 @@ use App\Http\Controllers\Api\CountryCodeController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
+
+Route::fallback(function () {
+    return ApiResponse::notFound(message: 'Requested url not found');
+});
 
 Route::group(['middleware' => ['guest'], 'prefix' => 'auth'], function () {
 
@@ -37,7 +42,6 @@ Route::group(['middleware' => ['auth:sanctum', 'locale']], function () {
         Route::get('profile', [UserController::class, 'profile']);
         Route::get('country-code', CountryCodeController::class);
         Route::apiResource('customers', CustomerController::class);
-        //        Route::resource('segments', SegmentController::class);
     });
 
 });

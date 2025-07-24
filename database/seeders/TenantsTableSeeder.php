@@ -2,6 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Enum\ActivationStatusEnum;
+use App\Enum\SubscriptionStatusEnum;
+use App\Models\Plan;
 use App\Models\Tenant;
 use Illuminate\Database\Seeder;
 

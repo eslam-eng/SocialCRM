@@ -24,7 +24,12 @@ class PlanRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255|unique:plans,name',
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('plans', 'name')->ignore($this->plan),
+            ],
             'description' => 'string|nullable',
             'price' => 'numeric|required|min:0',
             'billing_cycle' => ['required', Rule::in(SubscriptionDurationEnum::values())],
@@ -39,6 +44,9 @@ class PlanRequest extends BaseFormRequest
 
     protected function prepareForValidation(): void
     {
-        $this->merge(['is_active' => $this->boolean('is_active')]);
+        $this->merge([
+            'is_active' => $this->boolean('is_active'),
+            'currency_code' => 'USD'
+        ]);
     }
 }

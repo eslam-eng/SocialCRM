@@ -14,7 +14,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class PlanController extends Controller
 {
-    public function __construct(protected PlanService $planService) {}
+    public function __construct(protected PlanService $planService)
+    {
+    }
 
     /**
      * Display a listing of the resource.
@@ -22,8 +24,6 @@ class PlanController extends Controller
     public function index(Request $request)
     {
         $filters = [
-            'limits_only' => $request->query('limits_only'),
-            'addons_only' => $request->query('addons_only'),
             'billing_cycle' => $request->query('billing_cycle', SubscriptionDurationEnum::MONTHLY->value),
             'is_active' => $request->query('is_active', true),
         ];
@@ -59,9 +59,17 @@ class PlanController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(PlanRequest $request, string $id)
     {
-        //
+        try {
+            $planDTO = PlanDTO::fromRequest($request);
+            $plan = $this->planService->update(planDTO: $planDTO, plan: $id);
+            return ApiResponse::success(data: PlanResource::make($plan->loadMissing(['limitFeatures', 'addonFeatures'])), message: __('app.plan_updated_successfully'));
+        } catch (NotFoundHttpException $e) {
+            return ApiResponse::notFound(message: 'Plan not found');
+        }
+
+
     }
 
     /**

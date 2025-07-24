@@ -37,27 +37,45 @@ class PlanService extends BaseService
      */
     public function create(PlanDTO $planDTO)
     {
-        $limitsToAttach = collect($planDTO->limits)
-            ->mapWithKeys(function ($value, $id) {
-                return [$id => ['value' => $value]];
-            })
-            ->all();
-
-        $featuresToAttach = collect($planDTO->limits)
-            ->mapWithKeys(function ($value, $id) {
-                return [$id => ['value' => $value]];
-            })
-            ->all();
-
-        return DB::transaction(function () use ($planDTO, $featuresToAttach, $limitsToAttach) {
+        return DB::transaction(function () use ($planDTO) {
             $plan = $this->getQuery()->create($planDTO->toArray());
-            $allFeaturesToAttach = array_merge($featuresToAttach, $limitsToAttach);
+            $allFeaturesToAttach = $this->prepareFeaturesAndLimits($planDTO);
             $plan->features()->attach($allFeaturesToAttach);
-
             return $plan;
         });
     }
 
+    /**
+     * @throws \Throwable
+     */
+    public function update(PlanDTO $planDTO, int $plan)
+    {
+        $plan = $this->findById($plan);
+
+        return DB::transaction(function () use ($planDTO,$plan) {
+            $plan->update($planDTO->toArrayExcept(['features','limits']));
+            $allFeaturesToAttach = $this->prepareFeaturesAndLimits($planDTO);
+            $plan->features()->sync($allFeaturesToAttach);
+            return $plan;
+        });
+    }
+
+
+    /**
+     * Prepare combined features and limits array for sync/attach
+     */
+    private function prepareFeaturesAndLimits(PlanDTO $planDTO): array
+    {
+        $features = collect($planDTO->features ?? [])->mapWithKeys(function ($value, $id) {
+            return [$id => ['value' => $value]];
+        })->all();
+
+        $limits = collect($planDTO->limits ?? [])->mapWithKeys(function ($value, $id) {
+            return [$id => ['value' => $value]];
+        })->all();
+
+        return array_merge($features, $limits);
+    }
     public function delete(int $plan_id): ?bool
     {
         $plan = $this->findById($plan_id);

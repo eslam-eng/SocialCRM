@@ -7,6 +7,7 @@ use App\DTOs\TenantDTO;
 use App\DTOs\UserDTO;
 use App\Models\Plan;
 use App\Models\PlanSubscription;
+use App\Models\Role;
 use App\Models\Tenant;
 use App\Models\User;
 use App\Services\Plan\PlanService;
@@ -23,18 +24,20 @@ readonly class RegisterService
      * Inject UsersService via constructor.
      */
     public function __construct(
-        protected UserService $userService,
-        protected TenantService $tenantService,
-        protected PlanService $planService,
+        protected UserService             $userService,
+        protected TenantService           $tenantService,
+        protected PlanService             $planService,
         protected PlanSubscriptionService $planSubscriptionService
-    ) {}
+    )
+    {
+    }
 
     /**
      * @throws \Throwable
      */
     public function handle(UserDTO $registerDTO): User
     {
-        return DB::transaction(fn () => $this->registerUserWithTenant($registerDTO));
+        return DB::transaction(fn() => $this->registerUserWithTenant($registerDTO));
     }
 
     private function registerUserWithTenant(UserDTO $registerDTO): User
@@ -68,6 +71,7 @@ readonly class RegisterService
     private function createAndLinkUser(UserDTO $registerDTO, Tenant $tenant): User
     {
         $registerDTO->tenant_id = $tenant->id;
+        $registerDTO->role = Role::OWNER;
         $user = $this->userService->create($registerDTO);
         $tenant->users()->attach($user->id);
 

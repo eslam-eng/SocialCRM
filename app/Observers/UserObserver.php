@@ -11,7 +11,9 @@ class UserObserver
      */
     public function creating(User $user): void
     {
-        $user->tenant_id = auth()->user()->tenant_id;
+        if (! $user->tenant_id && auth()->check()) {
+            $user->tenant_id = auth()->user()->tenant_id;
+        }
     }
 
     /**

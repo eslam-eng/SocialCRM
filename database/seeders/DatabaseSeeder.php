@@ -14,12 +14,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(CurrencyTableSeeder::class);
-        $this->call(TenantsTableSeeder::class);
-        $this->call(UsersTableSeeder::class);
         $this->call(PlansTableSeeder::class);
-        $this->call(AdminTableSeeder::class);
         $this->call(FeatureTableSeeder::class);
         $this->call(FeaturePlanTableSeeder::class);
+        $this->call(TenantsTableSeeder::class);
+        $this->call(UsersTableSeeder::class);
         $this->call(CustomersTableSeeder::class);
+        $this->call(AdminTableSeeder::class);
     }
 }
