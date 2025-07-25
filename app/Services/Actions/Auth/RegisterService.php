@@ -47,14 +47,18 @@ readonly class RegisterService
         $this->setupFreeTrial($tenant);
         $this->setUserLocation(user: $user);
 
-        return $user;
+        return $user->fresh();
     }
 
     private function createTenantFromDTO(UserDTO $registerDTO): Tenant
     {
+
+        // 1. Get the part before @
+        $slugBase = explode('@', $registerDTO->email)[0];
+
         $tenantDTO = new TenantDTO(
             name: $registerDTO->organization_name,
-            slug: Str::slug($registerDTO->organization_name)
+            slug: Str::slug($slugBase)
         );
 
         return $this->tenantService->create($tenantDTO);
@@ -94,7 +98,6 @@ readonly class RegisterService
             tenant_id: $tenant->id,
             starts_at: now(),
             ends_at: $trialEndsAt,
-            trial_ends_at: $trialEndsAt
         );
 
         return $this->planSubscriptionService->create($subscriptionPlanDTO);

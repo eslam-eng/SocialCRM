@@ -16,7 +16,6 @@ class SubscriptionPlanDTO extends BaseDTO
         public string $starts_at,
         public string $ends_at,
         public bool $auto_renew = ActivationStatusEnum::INACTIVE->value,
-        public ?string $trial_ends_at = null,
         public ?string $status = SubscriptionStatusEnum::ACTIVE->value,
     ) {}
 
@@ -41,7 +40,6 @@ class SubscriptionPlanDTO extends BaseDTO
             starts_at: $request->starts_at,
             ends_at: $request->ends_at,
             auto_renew: $request->auto_renew,
-            trial_ends_at: $request->trial_ends_at,
             status: $request->status,
         );
     }
@@ -54,7 +52,6 @@ class SubscriptionPlanDTO extends BaseDTO
             'starts_at' => $this->starts_at,
             'ends_at' => $this->ends_at,
             'auto_renew' => $this->auto_renew,
-            'trial_ends_at' => $this->trial_ends_at,
             'status' => $this->status,
         ];
     }
