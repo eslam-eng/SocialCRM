@@ -13,18 +13,15 @@ class Customer extends BaseModel
 
     protected $fillable = [
         'name',
-        'country_code',
-        'phone',
-        'email',
-        'source',
-        'address',
-        'status',
-        'tenant_id',
+        'country_code', 'phone', 'email',
+        'source', 'address','country','city','zipcode',
+        'status', 'tenant_id','tags'
     ];
 
     protected $casts = [
         'source' => CustomerSourceEnum::class,
         'status' => CustomerStatusEnum::class,
+        'tags'=>'array',
     ];
 
     //    protected $appends = ['custom_fields'];

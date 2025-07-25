@@ -16,7 +16,9 @@ class UsersTableSeeder extends Seeder
         User::factory()->create([
             'email'=>'eslam@gmail.com'
         ]);
+
         User::factory()->count(4)->create();
+
         User::query()->withoutGlobalScopes()->get()->each(function ($user) {
             TenantUser::query()->create([
                 'tenant_id' => $user->tenant_id,

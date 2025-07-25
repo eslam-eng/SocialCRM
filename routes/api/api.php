@@ -42,6 +42,7 @@ Route::group(['middleware' => ['auth:sanctum', 'locale']], function () {
         Route::get('profile', [UserController::class, 'profile']);
         Route::get('country-code', CountryCodeController::class);
         Route::apiResource('customers', CustomerController::class);
+        Route::get('customers-statics',[CustomerController::class,'statics']);
     });
 
 });

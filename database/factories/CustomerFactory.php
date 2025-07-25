@@ -23,6 +23,9 @@ class CustomerFactory extends Factory
             'email' => $this->faker->unique()->safeEmail(),
             'source' => $this->faker->randomElement(CustomerSourceEnum::cases()),
             'address' => $this->faker->address(),
+            'country' => $this->faker->country,
+            'city' => $this->faker->city,
+            'zipcode'=>$this->faker->postcode,
             'status' => $this->faker->randomElement(CustomerStatusEnum::cases()),
             'tenant_id' => $tenant->id,
         ];

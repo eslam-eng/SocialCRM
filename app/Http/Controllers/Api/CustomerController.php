@@ -22,7 +22,11 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        $filters = $request->all();
+        $filters = array_filter([
+            'name' => $request->name ?? null,
+            'status' => $request->status ?? null,
+        ], fn($value) => !is_null($value) && $value !== '');
+
         $customers = $this->customerService->paginate($filters);
 
         return CustomerResource::collection($customers);
@@ -45,7 +49,19 @@ class CustomerController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+            $customer = $this->customerService->findById($id);
+            return ApiResponse::success(data: CustomerResource::make($customer));
+        } catch (NotFoundHttpException $exception) {
+            return ApiResponse::notFound(message: $exception->getMessage());
+        }
+    }
+
+
+    public function statics()
+    {
+        $statics = $this->customerService->statics();
+        return ApiResponse::success(data: $statics);
     }
 
     /**

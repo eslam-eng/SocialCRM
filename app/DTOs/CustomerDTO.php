@@ -12,14 +12,21 @@ use Illuminate\Support\Arr;
 class CustomerDTO extends BaseDTO
 {
     public function __construct(
-        public string $name,
+        public string  $name,
         public ?string $country_code = null,
         public ?string $phone = null,
         public ?string $email = null,
+        public ?string $country = null,
+        public ?string $city = null,
+        public ?string $zipcode = null,
         public ?string $address = null,
-        public int $source = CustomerSourceEnum::MANUAL->value,
-        public int $status = CustomerStatusEnum::ACTIVE->value,
-    ) {}
+        public ?array  $tags = null,
+        public ?string $notes = null,
+        public int     $source = CustomerSourceEnum::MANUAL->value,
+        public int     $status = CustomerStatusEnum::ACTIVE->value,
+    )
+    {
+    }
 
     public static function fromArray(array $data): static
     {
@@ -28,9 +35,13 @@ class CustomerDTO extends BaseDTO
             country_code: Arr::get($data, 'country_code'),
             phone: Arr::get($data, 'phone'),
             email: Arr::get($data, 'email'),
-            address: Arr::get($data, 'address'),
+            country: Arr::get($data, 'country'),
+            city: Arr::get($data, 'city'),
+            zipcode: Arr::get($data, 'zipcode'),
+            address: Arr::get($data, 'address'), tags: Arr::get($data, 'tags'),
+            notes: Arr::get($data, 'notes'),
             source: Arr::get($data, 'source', CustomerSourceEnum::MANUAL->value),
-            status: Arr::get($data, 'status', ActivationStatusEnum::INACTIVE->value)
+            status: Arr::get($data, 'status', ActivationStatusEnum::INACTIVE->value),
         );
     }
 
@@ -41,9 +52,14 @@ class CustomerDTO extends BaseDTO
             country_code: $request->country_code,
             phone: $request->phone,
             email: $request->email,
+            country: $request->country,
+            city: $request->city,
+            zipcode: $request->zipcode,
             address: $request->address,
+            tags: $request->tags,
+            notes: $request->notes,
             source: $request->source,
-            status: $request->status
+            status: $request->status,
         );
     }
 
@@ -54,7 +70,12 @@ class CustomerDTO extends BaseDTO
             'country_code' => $this->country_code,
             'phone' => $this->phone,
             'email' => $this->email,
+            'country' => $this->country,
+            'city' => $this->city,
+            'zipcode' => $this->zipcode,
             'address' => $this->address,
+            'tags' => $this->tags,
+            'notes' => $this->notes,
             'source' => $this->source,
             'status' => $this->status,
         ];
