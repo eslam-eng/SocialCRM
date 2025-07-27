@@ -23,40 +23,32 @@ class TenantsTableSeeder extends Seeder
             throw new \RuntimeException('No trial plans found. Please create plans with trial_days > 0 first.');
         }
 
-       $tenants = Tenant::all();
+        $tenants = Tenant::all();
         foreach ($tenants as $tenant) {
             // Randomly select a trial plan
             $plan = $trialPlans->random();
+            // 3. Snapshot plan features and limits to pivot table
+            $featuresSnapshot = [];
 
+            foreach ($plan->features as $feature) {
+                $snapshot = $feature->only($feature->getFillable()); // includes id, slug, name, group, etc.
+                $snapshot['value'] = $feature->pivot?->value;
+                $featuresSnapshot[] = $snapshot;
+            }
+
+            $planSnapshot = $plan->only($plan->getFillable());
+
+            $planSnapshot['name'] = $plan->getTranslations('name');
             // Create subscription for the tenant
-            $subscription = $tenant->subscription()->create([
+            $tenant->subscription()->create([
                 'plan_id' => $plan->id,
                 'status' => SubscriptionStatusEnum::ACTIVE->value,
                 'starts_at' => now(),
                 'ends_at' => now()->addDays($plan->trial_days),
                 'auto_renew' => ActivationStatusEnum::INACTIVE->value,
+                'plan_snapshot' => $planSnapshot,
+                'features_snapshot' => $featuresSnapshot
             ]);
-
-            // 3. Snapshot plan features and limits to pivot table
-            $allFeatures = $plan->features; // Assuming this returns all features (including limits)
-
-            $snapshot = [];
-
-            foreach ($allFeatures as $feature) {
-                $pivotData = $feature->pivot?->value ?? null;
-
-                if (!$pivotData)
-                    continue;
-
-                $snapshot[$feature->id] = [
-                    'value' => $pivotData,
-                    'slug'=>$feature->slug,
-                    'name'=>json_encode($feature->getTranslations('name')),
-                    'group'=>$feature->group
-                ];
-            }
-            // 4. Attach to feature_plan_subscription pivot
-            $subscription->features()->attach($snapshot);
         }
 
     }

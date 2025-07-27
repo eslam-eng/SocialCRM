@@ -15,11 +15,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 #[ObservedBy([UserObserver::class])]
 class User extends Authenticatable
 {
-    use Filterable, HasApiTokens;
+    use Filterable, HasApiTokens,HasRoles;
 
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;

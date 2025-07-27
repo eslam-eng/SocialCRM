@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Plan;
+namespace App\Services\Admin\Plan;
 
 use App\DTOs\PlanDTO;
 use App\Models\Filters\PlansFilters;

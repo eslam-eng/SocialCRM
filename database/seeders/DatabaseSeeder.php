@@ -18,8 +18,10 @@ class DatabaseSeeder extends Seeder
         $this->call(FeatureTableSeeder::class);
         $this->call(FeaturePlanTableSeeder::class);
         $this->call(TenantsTableSeeder::class);
-        $this->call(UsersTableSeeder::class);
         $this->call(CustomersTableSeeder::class);
         $this->call(AdminTableSeeder::class);
+        $this->call(RolesTableSeeder::class);
+        $this->call(UsersTableSeeder::class);
+
     }
 }

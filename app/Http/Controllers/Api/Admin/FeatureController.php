@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Admin;
 
 use App\DTOs\FeatureDTO;
 use App\Helpers\ApiResponse;
@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Feature\StoreFeatureRequest;
 use App\Http\Requests\Feature\UpdateFeatureRequest;
 use App\Http\Resources\Api\SuperAdmin\FeatureResource;
-use App\Services\FeatureService;
+use App\Services\Admin\FeatureService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 

@@ -10,9 +10,9 @@ use App\Models\PlanSubscription;
 use App\Models\Role;
 use App\Models\Tenant;
 use App\Models\User;
-use App\Services\Plan\PlanService;
-use App\Services\Plan\PlanSubscriptionService;
-use App\Services\Tenant\TenantService;
+use App\Services\Admin\Plan\PlanService;
+use App\Services\Admin\Plan\PlanSubscriptionService;
+use App\Services\Admin\Tenant\TenantService;
 use App\Services\User\UserService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -91,13 +91,26 @@ readonly class RegisterService
 
     private function createTrialSubscription(Tenant $tenant, Plan $plan): PlanSubscription
     {
+        $featuresSnapshot = [];
+
+        foreach ($plan->features as $feature) {
+            $snapshot = $feature->only($feature->getFillable()); // includes id, slug, name, group, etc.
+            $snapshot['value'] = $feature->pivot?->value;
+            $featuresSnapshot[] = $snapshot;
+        }
         $trialEndsAt = now()->addDays($plan->trial_days);
+
+        $planSnapshot = $plan->only($plan->getFillable());
+
+        $planSnapshot['name'] = $plan->getTranslations('name');
 
         $subscriptionPlanDTO = new SubscriptionPlanDTO(
             plan_id: $plan->id,
             tenant_id: $tenant->id,
             starts_at: now(),
             ends_at: $trialEndsAt,
+            plan_snapshot: $planSnapshot,
+            plan_features_snapshot: $featuresSnapshot
         );
 
         return $this->planSubscriptionService->create($subscriptionPlanDTO);

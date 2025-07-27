@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Admin;
 
 use App\DTOs\FeatureDTO;
 use App\Models\Feature;
 use App\Models\Filters\FeaturesFilter;
+use App\Services\BaseService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;

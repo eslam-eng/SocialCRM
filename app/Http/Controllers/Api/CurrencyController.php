@@ -6,7 +6,7 @@ use App\DTOs\CurrencyDTO;
 use App\Helpers\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CurrencyRequest;
-use App\Services\CurrencyService;
+use App\Services\Admin\CurrencyService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

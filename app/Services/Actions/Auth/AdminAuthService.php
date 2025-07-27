@@ -4,8 +4,7 @@ namespace App\Services\Actions\Auth;
 
 use App\DTOs\AuthCredentialsDTO;
 use App\Models\Admin;
-use App\Models\User;
-use App\Services\User\AdminsService;
+use App\Services\Admin\AdminsService;
 use Illuminate\Support\Facades\Hash;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 

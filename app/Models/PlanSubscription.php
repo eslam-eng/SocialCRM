@@ -9,7 +9,9 @@ use App\Patterns\States\Subscription\ExpiredState;
 use App\Patterns\States\Subscription\PendingState;
 use App\Patterns\States\Subscription\SubscriptionState;
 use App\Patterns\States\Subscription\SuspendedState;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Arr;
 
 class PlanSubscription extends BaseModel
 {
@@ -21,6 +23,8 @@ class PlanSubscription extends BaseModel
         'ends_at',
         'trial_ends_at',
         'auto_renew',
+        'plan_snapshot',
+        'features_snapshot',
     ];
 
     protected $casts = [
@@ -29,6 +33,8 @@ class PlanSubscription extends BaseModel
         'ends_at' => 'datetime',
         'canceled_at' => 'datetime',
         'auto_renew' => 'boolean',
+        'plan_snapshot' => 'array',
+        'features_snapshot' => 'array',
     ];
 
     public function plan(): BelongsTo
@@ -41,11 +47,14 @@ class PlanSubscription extends BaseModel
         return $this->belongsTo(Tenant::class);
     }
 
-    public function features()
+
+    protected function planName(): Attribute
     {
-        return $this->belongsToMany(Feature::class, 'feature_plan_subscription')
-            ->withPivot('value', 'usage')
-            ->using(FeaturePlanSubscription::class);
+        $locale = app()->getLocale();
+        return Attribute::make(
+            get: fn() => Arr::get($this->plan_snapshot, 'name.' . $locale, $this->plan_snapshot['name']['en']) ?? null
+        );
+
     }
 
     public function setState(SubscriptionState $state): void

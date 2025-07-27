@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\User;
+namespace App\Services\Admin;
 
 use App\Models\Admin;
 use App\Models\Filters\AdminsFilter;
