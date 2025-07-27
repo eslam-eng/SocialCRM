@@ -1,5 +1,7 @@
 <?php
 
+use App\Enum\CampaignStatusEnum;
+use App\Models\Channel;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,10 +21,11 @@ return new class extends Migration
             $table->timestamp('scheduled_at')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->string('type')->comment('refer to is this Campaign for retention , follow-up or whatever')->nullable();
-            $table->foreignIdFor(\App\Models\Channel::class)->nullable()->constrained()->cascadeOnDelete();
+            $table->string('channel');
             $table->string('title');
             $table->string('content');
-            $table->tinyInteger('status')->default(\App\Enum\CampaignStatusEnum::ACTIVE->value);
+            $table->foreignId('template_id')->nullable()->constrained()->nullOnDelete();
+            $table->tinyInteger('status')->default(CampaignStatusEnum::ACTIVE->value);
             $table->tinyInteger('target')->comment('define if campaign is for specific segment,specific customers of for all')->default(\App\Enum\CampaignTargetEnum::ALL_CUSTOMERS->value);
             $table->timestamps();
         });

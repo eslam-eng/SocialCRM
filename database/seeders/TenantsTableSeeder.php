@@ -27,14 +27,6 @@ class TenantsTableSeeder extends Seeder
         foreach ($tenants as $tenant) {
             // Randomly select a trial plan
             $plan = $trialPlans->random();
-            // 3. Snapshot plan features and limits to pivot table
-            $featuresSnapshot = [];
-
-            foreach ($plan->features as $feature) {
-                $snapshot = $feature->only($feature->getFillable()); // includes id, slug, name, group, etc.
-                $snapshot['value'] = $feature->pivot?->value;
-                $featuresSnapshot[] = $snapshot;
-            }
 
             $planSnapshot = $plan->only($plan->getFillable());
 
@@ -46,8 +38,7 @@ class TenantsTableSeeder extends Seeder
                 'starts_at' => now(),
                 'ends_at' => now()->addDays($plan->trial_days),
                 'auto_renew' => ActivationStatusEnum::INACTIVE->value,
-                'plan_snapshot' => $planSnapshot,
-                'features_snapshot' => $featuresSnapshot
+                'plan_snapshot' => json_encode($planSnapshot)
             ]);
         }
 

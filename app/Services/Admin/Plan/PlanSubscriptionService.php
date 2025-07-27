@@ -7,6 +7,7 @@ use App\Models\Filters\PlanSubscriptionFilters;
 use App\Models\PlanSubscription;
 use App\Services\BaseService;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 
 class PlanSubscriptionService extends BaseService
@@ -23,10 +24,14 @@ class PlanSubscriptionService extends BaseService
 
     public function create(SubscriptionPlanDTO $subscriptionPlanDTO)
     {
-        return $this->getQuery()->create($subscriptionPlanDTO->toFilteredArray());
+        $subscriptionData = $subscriptionPlanDTO->toArray();
+        if (!empty($subscriptionPlanDTO->plan_snapshot))
+            $subscriptionData['plan_snapshot'] = json_encode($subscriptionPlanDTO->plan_snapshot);
+
+        return $this->getQuery()->create($subscriptionData);
     }
 
-    public function staticsByStatus(): \Illuminate\Database\Eloquent\Collection
+    public function staticsByStatus(): Collection
     {
         return $this->getQuery()
             ->select('status', DB::raw('count(*) as total'))

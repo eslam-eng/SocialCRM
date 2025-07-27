@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Auth\ForgotPasswordController;
 use App\Http\Controllers\Api\Auth\GoogleAuthController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\SendVerificationCodeController;
+use App\Http\Controllers\Api\CampaignController;
 use App\Http\Controllers\Api\CountryCodeController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\UserController;
@@ -43,6 +44,10 @@ Route::group(['middleware' => ['auth:sanctum', 'locale']], function () {
         Route::get('country-code', CountryCodeController::class);
         Route::apiResource('customers', CustomerController::class);
         Route::get('customers-statics',[CustomerController::class,'statics']);
+        // Static route first
+        Route::get('campaign/types', [CampaignController::class, 'campaignTypes']);
+        Route::apiResource('campaigns', CampaignController::class);
+
     });
 
 });

@@ -18,7 +18,6 @@ class SubscriptionPlanDTO extends BaseDTO
         public bool $auto_renew = ActivationStatusEnum::INACTIVE->value,
         public ?string $status = SubscriptionStatusEnum::ACTIVE->value,
         public ?array $plan_snapshot = null,
-        public ?array $plan_features_snapshot = null,
     ) {}
 
     public static function fromArray(array $data): static
@@ -31,7 +30,6 @@ class SubscriptionPlanDTO extends BaseDTO
             auto_renew: Arr::get($data, 'auto_renew'),
             status: Arr::get($data, 'status'),
             plan_snapshot: Arr::get($data, 'plan_snapshot'),
-            plan_features_snapshot: Arr::get($data, 'plan_features_snapshot'),
 
         );
     }
@@ -46,7 +44,6 @@ class SubscriptionPlanDTO extends BaseDTO
             auto_renew: $request->auto_renew,
             status: $request->status,
             plan_snapshot: $request->plan_snapshot,
-            plan_features_snapshot: $request->plan_features_snapshot,
         );
     }
 
@@ -60,7 +57,6 @@ class SubscriptionPlanDTO extends BaseDTO
             'auto_renew' => $this->auto_renew,
             'status' => $this->status,
             'plan_snapshot' => $this->plan_snapshot,
-            'plan_features_snapshot' => $this->plan_features_snapshot,
         ];
     }
 }

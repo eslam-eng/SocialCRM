@@ -23,8 +23,7 @@ class PlanSubscription extends BaseModel
         'ends_at',
         'trial_ends_at',
         'auto_renew',
-        'plan_snapshot',
-        'features_snapshot',
+        'plan_snapshot'
     ];
 
     protected $casts = [
@@ -34,7 +33,6 @@ class PlanSubscription extends BaseModel
         'canceled_at' => 'datetime',
         'auto_renew' => 'boolean',
         'plan_snapshot' => 'array',
-        'features_snapshot' => 'array',
     ];
 
     public function plan(): BelongsTo
@@ -47,6 +45,12 @@ class PlanSubscription extends BaseModel
         return $this->belongsTo(Tenant::class);
     }
 
+    public function features()
+    {
+        return $this->belongsToMany(Feature::class, 'feature_plan_subscription')
+            ->withPivot('value', 'usage')
+            ->using(FeaturePlanSubscription::class);
+    }
 
     protected function planName(): Attribute
     {

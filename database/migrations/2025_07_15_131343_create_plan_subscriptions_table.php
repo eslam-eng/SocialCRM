@@ -21,7 +21,6 @@ return new class extends Migration
             $table->timestamp('ends_at')->nullable();
             $table->boolean('auto_renew')->default(true);
             $table->json('plan_snapshot');
-            $table->json('features_snapshot');
             $table->ulid('tenant_id');
             $table->foreign('tenant_id')->references('id')->on('tenants')->onDelete('cascade');
             $table->timestamps();

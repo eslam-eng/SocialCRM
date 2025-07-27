@@ -16,7 +16,6 @@ class Tenant extends BaseModel
         'slug',
         'is_active',
         'users_count',
-        'owner_id'
     ];
 
     protected $casts = [
