@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\DTOs\CampaignDTO;
+use App\DTOs\Campaign\CampaignDTO;
 use App\Models\Campaign;
 use App\Models\Filters\CampaignFilters;
 use Illuminate\Database\Eloquent\Builder;

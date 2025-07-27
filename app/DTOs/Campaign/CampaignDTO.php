@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DTOs;
+namespace App\DTOs\Campaign;
 
 use App\DTOS\Abstract\BaseDTO;
 use App\Enum\CampaignTargetEnum;
@@ -10,11 +10,12 @@ use Illuminate\Support\Arr;
 class CampaignDTO extends BaseDTO
 {
     public function __construct(
-        public string $title,
-        public string $body,
-        public string $campaign_type,
-        public string $target,
         public string $channel,
+        public string $target,
+        public ?int $template_id = null,
+        public ?string $title = null,
+        public ?string $body = null,
+        public string $campaign_type,
         public ?string $scheduled_at = null,
         public ?array $media_ids = null,
         public mixed $contacts_file = null

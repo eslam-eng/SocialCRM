@@ -37,5 +37,56 @@ return [
             'required' => 'Password is required.',
             'confirmed' => 'Password confirmation does not match.',
         ],
+
+        'template' => [
+            // Basic template fields
+            'name_required' => 'Template name is required',
+            'name_string' => 'Template name must be a string',
+            'name_max' => 'Template name cannot exceed :max characters',
+
+            'description_string' => 'Description must be a string',
+            'description_max' => 'Description cannot exceed :max characters',
+
+            'category_required' => 'Campaign category is required',
+            'category_in' => 'Selected campaign category is invalid. Valid options: :values',
+
+            'template_type_required' => 'Template type is required',
+            'template_type_in' => 'Selected template type is invalid. Valid options: :values',
+
+            'content_required' => 'Template content is required',
+            'content_string' => 'Template content must be a string',
+
+            'header_content_string' => 'Header content must be a string',
+            'header_content_max' => 'Header content cannot exceed :max characters',
+
+            'footer_content_string' => 'Footer content must be a string',
+            'footer_content_max' => 'Footer content cannot exceed :max characters',
+
+            'is_active_required' => 'Active status is required',
+            'is_active_boolean' => 'Active status must be true or false',
+
+            // Template buttons validation
+            'template_buttons_array' => 'Template buttons must be an array',
+            'template_buttons_min' => 'At least :min button is required',
+
+            'button_text_required' => 'Button text is required for button at position :position',
+            'button_text_string' => 'Button text must be a string for button at position :position',
+            'button_text_max' => 'Button text cannot exceed :max characters for button at position :position',
+
+            'button_type_required' => 'Button type is required for button at position :position',
+            'button_type_in' => 'Invalid button type for button at position :position. Valid types: :values',
+
+            'action_value_required' => 'Action value is required for button at position :position',
+            'action_value_string' => 'Action value must be a string for button at position :position',
+
+            // Template parameters validation
+            'template_parms_array' => 'Template parameters must be an array',
+            'template_parms_min' => 'At least :min parameter is required',
+
+            'parm_name_required' => 'Parameter name is required for parameter at position :position',
+            'parm_name_string' => 'Parameter name must be a string for parameter at position :position',
+            'parm_name_max' => 'Parameter name cannot exceed :max characters for parameter at position :position',
+
+        ],
     ],
 ];
