@@ -15,7 +15,6 @@ class UserDTO extends BaseDTO
         public ?string $password = null,
         public ?string $phone = null,
         public ?string $tenant_id = null,
-        public ?string $role = null,
     ) {}
 
     public static function fromArray(array $data): static
@@ -27,7 +26,6 @@ class UserDTO extends BaseDTO
             password: Arr::get($data, 'password'),
             phone: Arr::get($data, 'phone'),
             tenant_id: Arr::get($data, 'tenant_id'),
-            role: Arr::get($data, 'role'),
         );
     }
 
@@ -40,7 +38,6 @@ class UserDTO extends BaseDTO
             password: $request->password,
             phone: $request->phone,
             tenant_id: $request->tenant_id,
-            role: $request->role,
         );
     }
 
@@ -53,7 +50,6 @@ class UserDTO extends BaseDTO
             'password' => $this->password,
             'phone' => $this->phone,
             'tenant_id' => $this->tenant_id,
-            'role' => $this->role,
         ];
     }
 }

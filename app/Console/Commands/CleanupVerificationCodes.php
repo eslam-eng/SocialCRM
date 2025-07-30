@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\VerificationCode;
+use App\Models\Landlord\VerificationCode;
 use Illuminate\Console\Command;
 
 class CleanupVerificationCodes extends Command

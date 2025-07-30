@@ -3,11 +3,11 @@
 namespace App\Patterns\States\Subscription;
 
 use App\Enum\SubscriptionStatusEnum;
-use App\Models\PlanSubscription;
+use App\Models\Landlord\Subscription;
 
 abstract class SubscriptionState
 {
-    public function __construct(protected PlanSubscription $subscription) {}
+    public function __construct(protected Subscription $subscription) {}
 
     abstract public function activate(): void;
 

@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Role;
+use App\Enum\ActivationStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,15 +17,12 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password')->nullable()->comment('set nullable if user only uses OAuth');
             $table->string('phone')->nullable();
-            $table->string('tenant_id')->comment('current tenant as user may be belongs to multiple tenants');
-            $table->string('country')->nullable();
             $table->string('device_token')->nullable();
-            $table->boolean('is_active')->default(\App\Enum\ActivationStatusEnum::ACTIVE->value);
+            $table->boolean('is_active')->default(ActivationStatusEnum::ACTIVE->value);
             $table->string('locale')->default('en');
-            $table->string('timezone')->nullable();
-            $table->string('role')->default(Role::USER);
+            $table->string('timezone')->default('UTC');
+            $table->string('landlord_user_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

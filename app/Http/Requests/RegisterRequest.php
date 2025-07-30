@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class RegisterRequest extends BaseFormRequest
@@ -23,7 +24,7 @@ class RegisterRequest extends BaseFormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'organization_name' => 'required|string|max:255',
+            'organization_name' => ['required', 'string', 'max:255', Rule::unique('tenants', 'slug')->whereNull('deleted_at')],
             'email' => 'required|email|unique:users,email',
             'password' => ['required', 'string', 'confirmed', Password::min(8)->mixedCase()],
         ];

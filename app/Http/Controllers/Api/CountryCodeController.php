@@ -14,6 +14,7 @@ class CountryCodeController extends Controller
         $jsonContents = file_get_contents($file);
 
         $countryCodes = json_decode($jsonContents, true); // decode as associative array
+
         return ApiResponse::success(data: $countryCodes);
     }
 }
